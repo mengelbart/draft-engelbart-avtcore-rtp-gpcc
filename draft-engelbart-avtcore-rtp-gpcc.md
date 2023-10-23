@@ -64,7 +64,7 @@ author:
 normative:
    ISO.IEC.23090-9:
       title: "Information technology — Coded representation of immersive media — Part 9: Geometry-based point cloud compression"
-      author: 
+      author:
          org: "ISO/IEC"
       date: 2023
       seriesinfo:
@@ -79,10 +79,10 @@ This memo describes an RTP payload format for geometry-based point cloud
 compression (G-PCC) ({{ISO.IEC.23090-9}}). The RTP payload format defined in
 this document supports the packetization of one or more data units in an RTP
 packet payload and the fragmentation of a single data unit into multiple RTP
-packets. This memo also describes congestion control for a practical solution 
+packets. This memo also describes congestion control for a practical solution
 for the real-time streaming of point clouds.
 Finally, the document defines parameters that may be used to select
-optional features of the payload format or signall properties of the RTP stream. 
+optional features of the payload format or signall properties of the RTP stream.
 The parameters can be used with Session Description Protocol (SDP).
 
 --- middle
@@ -160,7 +160,7 @@ Geometry and attribute data units contain the coded representation of points geo
 points attributes information. Geometry and attribute data units hold references to their
 associated parameter sets, and each referenced parameter set must be available
 before decoding of the data unit is possible.
- 
+
 Coded point clouds do not have dependencies between frames, i.e., decoding a
 point cloud frame is always without depending on a previous or following frame
 in a sequence. However, future versions of G-PCC might support inter-frame
@@ -332,7 +332,7 @@ header. The payload header consists of a packet type and unit type field.
 
 ~~~
  0
- 0 1 2 3 4 5 6 7 
+ 0 1 2 3 4 5 6 7
 +-+-+-+-+-+-+-+-+
 | Typ |Unit-Type|
 +-+-+-+-+-+-+-+-+
@@ -406,7 +406,7 @@ size and indicates the length of the DU. The two most significant
 bits of the length field encode the base-2 logarithm of the size of the length
 field in bytes as defined in Section 16 of {{!RFC9000}}. Thus, the length field
 can have 1, 2, 4, or 8 bytes. The receiver can split the packet payload into
-individual units by reading the length byte. 
+individual units by reading the length byte.
 
 An aggregation packet MUST carry at least two DUs. Aggregation
 packets MAY carry more than two DUs. The total amount of data in
@@ -464,7 +464,7 @@ Fragmentation units allow fragmentation of single DUs into
 multiple RTP packets without cooperation from the G-PCC encoder. Fragments of
 the same DU MUST be sent in consecutive order with ascending RTP
 sequence numbers (with no other RTP packets within the same RTP stream being
-sent between the first and last fragment). 
+sent between the first and last fragment).
 
 Aggregation packets MUST NOT be fragmented. Fragmentation units MUST NOT be
 nested, i.e., a fragmentation unit cannot contain a subset of another
@@ -573,7 +573,7 @@ points per line and depth resolution.
 
 > \<#lines\> \<#points-per-line\> \<#depth-resolution\>
 
-**pcc-coverage**: 
+**pcc-coverage**:
 : The field of view coverage of the sensor described by the horizontal and
 vertical angles.
 
@@ -586,7 +586,7 @@ are given. This can be useful to relate multiple point clouds to each other.
 > \<x\> \<y\> \<z\>
 
 **pcc-orientation**:
-: The orientation of the point cloud sensor. 
+: The orientation of the point cloud sensor.
 
 > \<tilt\> \<pan\>
 
