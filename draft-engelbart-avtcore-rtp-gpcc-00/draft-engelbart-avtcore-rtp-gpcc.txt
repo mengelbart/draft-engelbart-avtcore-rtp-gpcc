@@ -819,58 +819,58 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
+              <https://www.rfc-editor.org/rfc/rfc2119>.
 
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
-
-   [RFC3550]  Schulzrinne, H., Casner, S., Frederick, R., and V.
-              Jacobson, "RTP: A Transport Protocol for Real-Time
-              Applications", STD 64, RFC 3550, DOI 10.17487/RFC3550,
-              July 2003, <https://www.rfc-editor.org/info/rfc3550>.
-
-   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
-              Multiplexed and Secure Transport", RFC 9000,
-              DOI 10.17487/RFC9000, May 2021,
-              <https://www.rfc-editor.org/info/rfc9000>.
-
-   [RFC4288]  Freed, N. and J. Klensin, "Media Type Specifications and
-              Registration Procedures", RFC 4288, DOI 10.17487/RFC4288,
-              December 2005, <https://www.rfc-editor.org/info/rfc4288>.
-
-   [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
-              Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
-              <https://www.rfc-editor.org/info/rfc4648>.
-
-   [RFC8866]  Begen, A., Kyzivat, P., Perkins, C., and M. Handley, "SDP:
-              Session Description Protocol", RFC 8866,
-              DOI 10.17487/RFC8866, January 2021,
-              <https://www.rfc-editor.org/info/rfc8866>.
+   [RFC2974]  Handley, M., Perkins, C., and E. Whelan, "Session
+              Announcement Protocol", RFC 2974, DOI 10.17487/RFC2974,
+              October 2000, <https://www.rfc-editor.org/rfc/rfc2974>.
 
    [RFC3264]  Rosenberg, J. and H. Schulzrinne, "An Offer/Answer Model
               with Session Description Protocol (SDP)", RFC 3264,
               DOI 10.17487/RFC3264, June 2002,
-              <https://www.rfc-editor.org/info/rfc3264>.
+              <https://www.rfc-editor.org/rfc/rfc3264>.
 
-   [RFC7826]  Schulzrinne, H., Rao, A., Lanphier, R., Westerlund, M.,
-              and M. Stiemerling, Ed., "Real-Time Streaming Protocol
-              Version 2.0", RFC 7826, DOI 10.17487/RFC7826, December
-              2016, <https://www.rfc-editor.org/info/rfc7826>.
-
-   [RFC2974]  Handley, M., Perkins, C., and E. Whelan, "Session
-              Announcement Protocol", RFC 2974, DOI 10.17487/RFC2974,
-              October 2000, <https://www.rfc-editor.org/info/rfc2974>.
+   [RFC3550]  Schulzrinne, H., Casner, S., Frederick, R., and V.
+              Jacobson, "RTP: A Transport Protocol for Real-Time
+              Applications", STD 64, RFC 3550, DOI 10.17487/RFC3550,
+              July 2003, <https://www.rfc-editor.org/rfc/rfc3550>.
 
    [RFC3551]  Schulzrinne, H. and S. Casner, "RTP Profile for Audio and
               Video Conferences with Minimal Control", STD 65, RFC 3551,
               DOI 10.17487/RFC3551, July 2003,
-              <https://www.rfc-editor.org/info/rfc3551>.
+              <https://www.rfc-editor.org/rfc/rfc3551>.
+
+   [RFC4288]  Freed, N. and J. Klensin, "Media Type Specifications and
+              Registration Procedures", RFC 4288, DOI 10.17487/RFC4288,
+              December 2005, <https://www.rfc-editor.org/rfc/rfc4288>.
+
+   [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
+              Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
+              <https://www.rfc-editor.org/rfc/rfc4648>.
+
+   [RFC7826]  Schulzrinne, H., Rao, A., Lanphier, R., Westerlund, M.,
+              and M. Stiemerling, Ed., "Real-Time Streaming Protocol
+              Version 2.0", RFC 7826, DOI 10.17487/RFC7826, December
+              2016, <https://www.rfc-editor.org/rfc/rfc7826>.
 
    [RFC8083]  Perkins, C. and V. Singh, "Multimedia Congestion Control:
               Circuit Breakers for Unicast RTP Sessions", RFC 8083,
               DOI 10.17487/RFC8083, March 2017,
-              <https://www.rfc-editor.org/info/rfc8083>.
+              <https://www.rfc-editor.org/rfc/rfc8083>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8866]  Begen, A., Kyzivat, P., Perkins, C., and M. Handley, "SDP:
+              Session Description Protocol", RFC 8866,
+              DOI 10.17487/RFC8866, January 2021,
+              <https://www.rfc-editor.org/rfc/rfc8866>.
+
+   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
 
 Acknowledgments
 
