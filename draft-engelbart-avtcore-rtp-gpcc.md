@@ -38,10 +38,10 @@ keyword:
 venue:
   group: avtcore
   type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
+  mail: avt@ietf.org
+  arch: https://mailarchive.ietf.org/arch/browse/avt/
   github: mengelbart/draft-engelbart-avtcore-rtp-gpcc
-  latest: https://example.com/LATEST
+  latest: https://mengelbart.github.io/draft-engelbart-avtcore-rtp-gpcc/draft-engelbart-avtcore-rtp-gpcc.html
 
 author:
  -
