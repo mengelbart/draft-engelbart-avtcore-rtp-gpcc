@@ -1,40 +1,22 @@
 ---
-###
-# Internet-Draft Markdown Template
-#
-# Rename this file from draft-todo-yourname-protocol.md to get started.
-# Draft name format is "draft-<yourname>-<workgroup>-<name>.md".
-#
-# For initial setup, you only need to edit the first block of fields.
-# Only "title" needs to be changed; delete "abbrev" if your title is short.
-# Any other content can be edited, but be careful not to introduce errors.
-# Some fields will be set automatically during setup if they are unchanged.
-#
-# Don't include "-00" or "-latest" in the filename.
-# Labels in the form draft-<yourname>-<workgroup>-<name>-latest are used by
-# the tools to refer to the current version; see "docname" for example.
-#
-# This template uses kramdown-rfc: https://github.com/cabo/kramdown-rfc
-# You can replace the entire file if you prefer a different format.
-# Change the file extension to match the format (.xml for XML, etc...)
-#
-###
 title: "RTP Payload Format for Geometry-based Point Cloud Compression"
 abbrev: "RTP Payload Format for G-PCC"
-category: info
-
 docname: draft-engelbart-avtcore-rtp-gpcc-latest
-submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
-number:
-date:
-consensus: true
-v: 3
-area: Applications and Real-Time Area
-workgroup: AVTCORE
+category: std
+date: {DATE}
+
+ipr: trust200902
+area: "Applications and Real-Time Area"
+workgroup: "Audio/Video Transport Core Maintenance"
 keyword:
  - RTP
  - G-PCC
  - Payload Format
+
+stand_alone: yes
+pi: [toc, sortrefs, symrefs]
+submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
+
 venue:
   group: avtcore
   type: Working Group
@@ -70,8 +52,6 @@ normative:
       seriesinfo:
          ISO/IEC: 23090-9
       target: https://www.iso.org/standard/78990.html
-
-informative:
 
 --- abstract
 
@@ -505,7 +485,7 @@ optional parameters that can be used with it.
 
 ## Media Type Definition {#media-type}
 
-> **Note**: Template from {{Section 10 of !RFC4288}}
+> **Note**: Template from {{Section 10 of ?RFC4288}}
 
 {: vspace="0"}
 **Type name**:
@@ -667,7 +647,7 @@ limitations and rules apply:
 
 When G-PCC over RTP is offered with SDP in a declarative style, as in Real Time
 Streaming Protocol (RTSP) {{!RFC7826}} or Session Announcement Protocol (SAP)
-{{!RFC2974}}, the following considerations are necessary.
+{{?RFC2974}}, the following considerations are necessary.
 
 * All parameters capable of indicating both stream properties and receiver
   capabilities are used to indicate only stream properties. In this case, the
@@ -710,16 +690,16 @@ registry for "RTP Payload Format MIME types"
 # Security Considerations {#security-considerations}
 
 RTP packets using the payload format defined in this specification are subject
-to the security considerations discussed in the RTP specification [RFC3550] ,
-and in any applicable RTP profile such as RTP/AVP [RFC3551], RTP/AVPF [RFC4585],
-RTP/SAVP [RFC3711], or RTP/ SAVPF [RFC5124].  However, as "Securing the RTP
+to the security considerations discussed in the RTP specification {{!RFC3550}},
+and in any applicable RTP profile such as RTP/AVP {{!RFC3551}}, RTP/AVPF {{!RFC4585}},
+RTP/SAVP {{!RFC3711}}, or RTP/ SAVPF {{!RFC5124}}.  However, as "Securing the RTP
 Protocol Framework: Why RTP Does Not Mandate a Single Media Security Solution"
-[RFC7202] discusses, it is not an RTP payload format's responsibility to discuss
+{{?RFC7202}} discusses, it is not an RTP payload format's responsibility to discuss
 or mandate what solutions are used to meet the basic security goals like
 confidentiality, integrity, and source authenticity for RTP in general.  This
 responsibility lays on anyone using RTP in an application.  They can find
 guidance on available security mechanisms and important considerations in
-"Options for Securing RTP Sessions" [RFC7201].  Applications SHOULD use one or
+"Options for Securing RTP Sessions" {{?RFC7201}}.  Applications SHOULD use one or
 more appropriate strong security mechanisms.  The rest of this Security
 Considerations section discusses the security impacting properties of the
 payload format itself.
