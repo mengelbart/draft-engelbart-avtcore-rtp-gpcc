@@ -860,15 +860,6 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
               (RTP/SAVPF)", RFC 5124, DOI 10.17487/RFC5124, February
               2008, <https://www.rfc-editor.org/rfc/rfc5124>.
 
-   [RFC7201]  Westerlund, M. and C. Perkins, "Options for Securing RTP
-              Sessions", RFC 7201, DOI 10.17487/RFC7201, April 2014,
-              <https://www.rfc-editor.org/rfc/rfc7201>.
-
-   [RFC7202]  Perkins, C. and M. Westerlund, "Securing the RTP
-              Framework: Why RTP Does Not Mandate a Single Media
-              Security Solution", RFC 7202, DOI 10.17487/RFC7202, April
-              2014, <https://www.rfc-editor.org/rfc/rfc7202>.
-
    [RFC7826]  Schulzrinne, H., Rao, A., Lanphier, R., Westerlund, M.,
               and M. Stiemerling, Ed., "Real-Time Streaming Protocol
               Version 2.0", RFC 7826, DOI 10.17487/RFC7826, December
@@ -902,6 +893,15 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
    [RFC4288]  Freed, N. and J. Klensin, "Media Type Specifications and
               Registration Procedures", RFC 4288, DOI 10.17487/RFC4288,
               December 2005, <https://www.rfc-editor.org/rfc/rfc4288>.
+
+   [RFC7201]  Westerlund, M. and C. Perkins, "Options for Securing RTP
+              Sessions", RFC 7201, DOI 10.17487/RFC7201, April 2014,
+              <https://www.rfc-editor.org/rfc/rfc7201>.
+
+   [RFC7202]  Perkins, C. and M. Westerlund, "Securing the RTP
+              Framework: Why RTP Does Not Mandate a Single Media
+              Security Solution", RFC 7202, DOI 10.17487/RFC7202, April
+              2014, <https://www.rfc-editor.org/rfc/rfc7202>.
 
 Acknowledgments
 
