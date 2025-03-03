@@ -5,9 +5,9 @@
 Audio/Video Transport Core Maintenance                      M. Engelbart
 Internet-Draft                                                    J. Ott
 Intended status: Standards Track             Technical University Munich
-Expires: 25 April 2024                                        L. Kondrad
+Expires: 4 September 2025                                     L. Kondrad
                                                       Nokia Technologies
-                                                         23 October 2023
+                                                            3 March 2025
 
 
      RTP Payload Format for Geometry-based Point Cloud Compression
@@ -23,8 +23,8 @@ Abstract
    congestion control for a practical solution for the real-time
    streaming of point clouds.  Finally, the document defines parameters
    that may be used to select optional features of the payload format or
-   signall properties of the RTP stream.  The parameters can be used
-   with Session Description Protocol (SDP).
+   signal properties of the RTP stream.  The parameters can be used with
+   the Session Description Protocol (SDP).
 
 About This Document
 
@@ -59,11 +59,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 April 2024.
+   This Internet-Draft will expire on 4 September 2025.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -204,9 +204,9 @@ Table of Contents
    before decoding of the data unit is possible.
 
    Coded point clouds do not have dependencies between frames, i.e.,
-   decoding a point cloud frame is always without depending on a
-   previous or following frame in a sequence.  However, future versions
-   of G-PCC might support inter-frame prediction.
+   decoding a point cloud frame is always possible without depending on
+   a previous or following frame in a sequence.  However, future
+   versions of G-PCC might support inter-frame prediction.
 
    Annex A of [ISO.IEC.23090-9] describes profiles and levels of the
    G-PCC codec.  Decoders can support different profiles and levels.
@@ -464,13 +464,8 @@ Table of Contents
    An aggregation packet contains two or more DUs.  Aggregation packets
    can reduce packetization and header overhead for small DUs such as
    parameter sets.  Each DU is prefixed with a separate payload header
-   and an additional length field.  The length field is of variable size
-   and indicates the length of the DU.  The two most significant bits of
-   the length field encode the base-2 logarithm of the size of the
-   length field in bytes as defined in Section 16 of [RFC9000].  Thus,
-   the length field can have 1, 2, 4, or 8 bytes.  The receiver can
-   split the packet payload into individual units by reading the length
-   byte.
+   and an additional length field.  The length field is 16-bit unsigned
+   integer indicating the length of the following DU in bytes.
 
    An aggregation packet MUST carry at least two DUs.  Aggregation
    packets MAY carry more than two DUs.  The total amount of data in an
@@ -492,7 +487,7 @@ Table of Contents
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |Typ=1|Unit-Type|                VarInt Length                 ...
+   |Typ=1|Unit-Type|            Size               |   Data Unit  ...
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                      Figure 4: Aggregation Unit Payload
@@ -503,14 +498,14 @@ Table of Contents
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | PayloadHeader |                VarInt Length                 ...
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | PayloadHeader |            Size               |               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
    |                                                               |
    |                           Data Unit                           |
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | PayloadHeader |                VarInt Length                 ...
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | PayloadHeader |           Size                |               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
    |                                                               |
    |                           Data Unit                           |
    |                                                               |
@@ -630,8 +625,8 @@ Table of Contents
       indicating support or conformance to the G-PCC profiles and
       levels.  The first four bits are flags indicating support for the
       profiles _Simple_, _Predictive_, _Dense_ and _Main_, while the
-      last for bits indicate the highest level that the decoder supports
-      or a bitstream conforms to.
+      last four bits indicate the highest level that the decoder
+      supports or a bitstream conforms to.
 
    *pcc-resolution*:  Describes the resolution of the point cloud as
       number of lines, number of points per line and depth resolution.
@@ -878,11 +873,6 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
               Session Description Protocol", RFC 8866,
               DOI 10.17487/RFC8866, January 2021,
               <https://www.rfc-editor.org/rfc/rfc8866>.
-
-   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
-              Multiplexed and Secure Transport", RFC 9000,
-              DOI 10.17487/RFC9000, May 2021,
-              <https://www.rfc-editor.org/rfc/rfc9000>.
 
 11.2.  Informative References
 
