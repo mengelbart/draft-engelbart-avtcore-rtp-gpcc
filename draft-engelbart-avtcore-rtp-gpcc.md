@@ -62,8 +62,8 @@ packet payload and the fragmentation of a single data unit into multiple RTP
 packets. This memo also describes congestion control for a practical solution
 for the real-time streaming of point clouds.
 Finally, the document defines parameters that may be used to select
-optional features of the payload format or signall properties of the RTP stream.
-The parameters can be used with Session Description Protocol (SDP).
+optional features of the payload format or signal properties of the RTP stream.
+The parameters can be used with the Session Description Protocol (SDP).
 
 --- middle
 
@@ -136,15 +136,16 @@ Sequence Parameter Set (SPS), Geometry Parameter Set (GPS), and Attribute
 Parameter Set (APS) hold the coding parameters of a point cloud sequence, the
 geometry coding in use, and the attribute coding in use, respectively.
 
-Geometry and attribute data units contain the coded representation of points geometry information and
-points attributes information. Geometry and attribute data units hold references to their
-associated parameter sets, and each referenced parameter set must be available
-before decoding of the data unit is possible.
+Geometry and attribute data units contain the coded representation of points
+geometry information and points attributes information. Geometry and attribute
+data units hold references to their associated parameter sets, and each
+referenced parameter set must be available before decoding of the data unit is
+possible.
 
 Coded point clouds do not have dependencies between frames, i.e., decoding a
-point cloud frame is always without depending on a previous or following frame
-in a sequence. However, future versions of G-PCC might support inter-frame
-prediction.
+point cloud frame is always possible without depending on a previous or
+following frame in a sequence. However, future versions of G-PCC might support
+inter-frame prediction.
 
 Annex A of {{ISO.IEC.23090-9}} describes profiles and levels of the G-PCC codec.
 Decoders can support different profiles and levels. Profiles are subsets of
@@ -378,15 +379,11 @@ to zero (binary `000`).
 
 ### Aggregation Packet {#aggregation-packet}
 
-An aggregation packet contains two or more DUs. Aggregation
-packets can reduce packetization and header overhead for small DUs
-such as parameter sets. Each DU is prefixed with a separate
-payload header and an additional length field. The length field is of variable
-size and indicates the length of the DU. The two most significant
-bits of the length field encode the base-2 logarithm of the size of the length
-field in bytes as defined in Section 16 of {{!RFC9000}}. Thus, the length field
-can have 1, 2, 4, or 8 bytes. The receiver can split the packet payload into
-individual units by reading the length byte.
+An aggregation packet contains two or more DUs. Aggregation packets can reduce
+packetization and header overhead for small DUs such as parameter sets. Each DU
+is prefixed with a separate payload header and an additional length field. The
+length field is 16-bit unsigned integer indicating the length of the following
+DU in bytes.
 
 An aggregation packet MUST carry at least two DUs. Aggregation
 packets MAY carry more than two DUs. The total amount of data in
@@ -409,7 +406,7 @@ structures in aggregation packets.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|Typ=1|Unit-Type|                VarInt Length                 ...
+|Typ=1|Unit-Type|            Size               |   Data Unit  ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
 {: #fig-aggregation-header title="Aggregation Unit Payload"}
@@ -421,14 +418,14 @@ An example of an aggregation unit packet with two data unit payloads is shown in
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| PayloadHeader |                VarInt Length                 ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| PayloadHeader |            Size               |               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
 |                                                               |
 |                           Data Unit                           |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| PayloadHeader |                VarInt Length                 ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| PayloadHeader |           Size                |               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
 |                                                               |
 |                           Data Unit                           |
 |                                                               |
@@ -544,7 +541,7 @@ optional parameters that can be used with it.
   of one byte containing the flags indicating support or conformance to the
   G-PCC profiles and levels. The first four bits are flags indicating support
   for the profiles *Simple*, *Predictive*, *Dense* and *Main*, while the last
-  for bits indicate the highest level that the decoder supports or a bitstream
+  four bits indicate the highest level that the decoder supports or a bitstream
   conforms to.
 
 **pcc-resolution**:
