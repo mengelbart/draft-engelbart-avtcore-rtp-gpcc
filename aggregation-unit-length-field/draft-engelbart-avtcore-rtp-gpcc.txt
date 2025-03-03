@@ -5,9 +5,9 @@
 Audio/Video Transport Core Maintenance                      M. Engelbart
 Internet-Draft                                                    J. Ott
 Intended status: Standards Track             Technical University Munich
-Expires: 25 April 2024                                        L. Kondrad
+Expires: 4 September 2025                                     L. Kondrad
                                                       Nokia Technologies
-                                                         23 October 2023
+                                                            3 March 2025
 
 
      RTP Payload Format for Geometry-based Point Cloud Compression
@@ -23,8 +23,8 @@ Abstract
    congestion control for a practical solution for the real-time
    streaming of point clouds.  Finally, the document defines parameters
    that may be used to select optional features of the payload format or
-   signall properties of the RTP stream.  The parameters can be used
-   with Session Description Protocol (SDP).
+   signal properties of the RTP stream.  The parameters can be used with
+   the Session Description Protocol (SDP).
 
 About This Document
 
@@ -59,11 +59,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 April 2024.
+   This Internet-Draft will expire on 4 September 2025.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -105,7 +105,9 @@ Table of Contents
    8.  IANA Considerations
    9.  Security Considerations
    10. RFC Editor Considerations
-   11. Normative References
+   11. References
+     11.1.  Normative References
+     11.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -202,9 +204,9 @@ Table of Contents
    before decoding of the data unit is possible.
 
    Coded point clouds do not have dependencies between frames, i.e.,
-   decoding a point cloud frame is always without depending on a
-   previous or following frame in a sequence.  However, future versions
-   of G-PCC might support inter-frame prediction.
+   decoding a point cloud frame is always possible without depending on
+   a previous or following frame in a sequence.  However, future
+   versions of G-PCC might support inter-frame prediction.
 
    Annex A of [ISO.IEC.23090-9] describes profiles and levels of the
    G-PCC codec.  Decoders can support different profiles and levels.
@@ -462,13 +464,8 @@ Table of Contents
    An aggregation packet contains two or more DUs.  Aggregation packets
    can reduce packetization and header overhead for small DUs such as
    parameter sets.  Each DU is prefixed with a separate payload header
-   and an additional length field.  The length field is of variable size
-   and indicates the length of the DU.  The two most significant bits of
-   the length field encode the base-2 logarithm of the size of the
-   length field in bytes as defined in Section 16 of [RFC9000].  Thus,
-   the length field can have 1, 2, 4, or 8 bytes.  The receiver can
-   split the packet payload into individual units by reading the length
-   byte.
+   and an additional length field.  The length field is 16-bit unsigned
+   integer indicating the length of the following DU in bytes.
 
    An aggregation packet MUST carry at least two DUs.  Aggregation
    packets MAY carry more than two DUs.  The total amount of data in an
@@ -490,7 +487,7 @@ Table of Contents
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |Typ=1|Unit-Type|                VarInt Length                 ...
+   |Typ=1|Unit-Type|            Size               |   Data Unit  ...
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                      Figure 4: Aggregation Unit Payload
@@ -501,14 +498,14 @@ Table of Contents
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | PayloadHeader |                VarInt Length                 ...
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | PayloadHeader |            Size               |               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
    |                                                               |
    |                           Data Unit                           |
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | PayloadHeader |                VarInt Length                 ...
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | PayloadHeader |           Size                |               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
    |                                                               |
    |                           Data Unit                           |
    |                                                               |
@@ -628,8 +625,8 @@ Table of Contents
       indicating support or conformance to the G-PCC profiles and
       levels.  The first four bits are flags indicating support for the
       profiles _Simple_, _Predictive_, _Dense_ and _Main_, while the
-      last for bits indicate the highest level that the decoder supports
-      or a bitstream conforms to.
+      last four bits indicate the highest level that the decoder
+      supports or a bitstream conforms to.
 
    *pcc-resolution*:  Describes the resolution of the point cloud as
       number of lines, number of points per line and depth resolution.
@@ -780,7 +777,7 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
 
    RTP packets using the payload format defined in this specification
    are subject to the security considerations discussed in the RTP
-   specification [RFC3550] , and in any applicable RTP profile such as
+   specification [RFC3550], and in any applicable RTP profile such as
    RTP/AVP [RFC3551], RTP/AVPF [RFC4585], RTP/SAVP [RFC3711], or RTP/
    SAVPF [RFC5124].  However, as "Securing the RTP Protocol Framework:
    Why RTP Does Not Mandate a Single Media Security Solution" [RFC7202]
@@ -808,7 +805,9 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
 
    TODO: Consider
 
-11.  Normative References
+11.  References
+
+11.1.  Normative References
 
    [ISO.IEC.23090-9]
               ISO/IEC, "Information technology — Coded representation of
@@ -820,10 +819,6 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
-
-   [RFC2974]  Handley, M., Perkins, C., and E. Whelan, "Session
-              Announcement Protocol", RFC 2974, DOI 10.17487/RFC2974,
-              October 2000, <https://www.rfc-editor.org/rfc/rfc2974>.
 
    [RFC3264]  Rosenberg, J. and H. Schulzrinne, "An Offer/Answer Model
               with Session Description Protocol (SDP)", RFC 3264,
@@ -840,13 +835,25 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
               DOI 10.17487/RFC3551, July 2003,
               <https://www.rfc-editor.org/rfc/rfc3551>.
 
-   [RFC4288]  Freed, N. and J. Klensin, "Media Type Specifications and
-              Registration Procedures", RFC 4288, DOI 10.17487/RFC4288,
-              December 2005, <https://www.rfc-editor.org/rfc/rfc4288>.
+   [RFC3711]  Baugher, M., McGrew, D., Naslund, M., Carrara, E., and K.
+              Norrman, "The Secure Real-time Transport Protocol (SRTP)",
+              RFC 3711, DOI 10.17487/RFC3711, March 2004,
+              <https://www.rfc-editor.org/rfc/rfc3711>.
+
+   [RFC4585]  Ott, J., Wenger, S., Sato, N., Burmeister, C., and J. Rey,
+              "Extended RTP Profile for Real-time Transport Control
+              Protocol (RTCP)-Based Feedback (RTP/AVPF)", RFC 4585,
+              DOI 10.17487/RFC4585, July 2006,
+              <https://www.rfc-editor.org/rfc/rfc4585>.
 
    [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
               <https://www.rfc-editor.org/rfc/rfc4648>.
+
+   [RFC5124]  Ott, J. and E. Carrara, "Extended Secure RTP Profile for
+              Real-time Transport Control Protocol (RTCP)-Based Feedback
+              (RTP/SAVPF)", RFC 5124, DOI 10.17487/RFC5124, February
+              2008, <https://www.rfc-editor.org/rfc/rfc5124>.
 
    [RFC7826]  Schulzrinne, H., Rao, A., Lanphier, R., Westerlund, M.,
               and M. Stiemerling, Ed., "Real-Time Streaming Protocol
@@ -867,10 +874,24 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
               DOI 10.17487/RFC8866, January 2021,
               <https://www.rfc-editor.org/rfc/rfc8866>.
 
-   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
-              Multiplexed and Secure Transport", RFC 9000,
-              DOI 10.17487/RFC9000, May 2021,
-              <https://www.rfc-editor.org/rfc/rfc9000>.
+11.2.  Informative References
+
+   [RFC2974]  Handley, M., Perkins, C., and E. Whelan, "Session
+              Announcement Protocol", RFC 2974, DOI 10.17487/RFC2974,
+              October 2000, <https://www.rfc-editor.org/rfc/rfc2974>.
+
+   [RFC4288]  Freed, N. and J. Klensin, "Media Type Specifications and
+              Registration Procedures", RFC 4288, DOI 10.17487/RFC4288,
+              December 2005, <https://www.rfc-editor.org/rfc/rfc4288>.
+
+   [RFC7201]  Westerlund, M. and C. Perkins, "Options for Securing RTP
+              Sessions", RFC 7201, DOI 10.17487/RFC7201, April 2014,
+              <https://www.rfc-editor.org/rfc/rfc7201>.
+
+   [RFC7202]  Perkins, C. and M. Westerlund, "Securing the RTP
+              Framework: Why RTP Does Not Mandate a Single Media
+              Security Solution", RFC 7202, DOI 10.17487/RFC7202, April
+              2014, <https://www.rfc-editor.org/rfc/rfc7202>.
 
 Acknowledgments
 
