@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-30T00:21:49.999572+00:00",
+  "timestamp": "2025-03-04T00:23:38.239740+00:00",
   "repo": "mengelbart/draft-engelbart-avtcore-rtp-gpcc",
   "labels": [
     {
@@ -50,5 +50,34 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOKkEXjM6NKh2V",
+      "title": "Simplify aggregation unit length field",
+      "url": "https://github.com/mengelbart/draft-engelbart-avtcore-rtp-gpcc/pull/1",
+      "state": "MERGED",
+      "author": "mengelbart",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-03T14:50:46Z",
+      "updatedAt": "2025-03-03T15:30:33Z",
+      "baseRepository": "mengelbart/draft-engelbart-avtcore-rtp-gpcc",
+      "baseRefName": "main",
+      "baseRefOid": "3f4b3289aabae4a4f27a770a40eb559023381ddb",
+      "headRepository": "mengelbart/draft-engelbart-avtcore-rtp-gpcc",
+      "headRefName": "aggregation-unit-length-field",
+      "headRefOid": "144708e07609d8f9e115c01f40d9b3aea927a535",
+      "closedAt": "2025-03-03T15:30:33Z",
+      "mergedAt": "2025-03-03T15:30:33Z",
+      "mergedBy": "mengelbart",
+      "mergeCommit": {
+        "oid": "e3cef3f33b78a65a63a72ec68237d33f785e4972"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
