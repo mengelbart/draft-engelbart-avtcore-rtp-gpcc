@@ -5,6 +5,7 @@ draft-engelbart-avtcore-rtp-gpcc.xml
 Gemfile.lock
 /.gems/
 *.html
+/.idea/
 /lib
 /.*.mk
 /node_modules/
