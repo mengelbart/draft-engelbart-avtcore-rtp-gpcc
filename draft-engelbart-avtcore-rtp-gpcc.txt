@@ -5,9 +5,9 @@
 Audio/Video Transport Core Maintenance                      M. Engelbart
 Internet-Draft                                                    J. Ott
 Intended status: Standards Track             Technical University Munich
-Expires: 4 September 2025                                     L. Kondrad
+Expires: 31 May 2027                                          L. Kondrad
                                                       Nokia Technologies
-                                                            3 March 2025
+                                                        27 November 2026
 
 
      RTP Payload Format for Geometry-based Point Cloud Compression
@@ -59,11 +59,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2025.
+   This Internet-Draft will expire on 31 May 2027.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -822,7 +822,7 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
 
    [RFC3264]  Rosenberg, J. and H. Schulzrinne, "An Offer/Answer Model
               with Session Description Protocol (SDP)", RFC 3264,
-              DOI 10.17487/RFC3264, June 2002,
+              DOI 10.17487/RFC3264, July 2002,
               <https://www.rfc-editor.org/rfc/rfc3264>.
 
    [RFC3550]  Schulzrinne, H., Casner, S., Frederick, R., and V.
