@@ -30,7 +30,7 @@ author:
     ins: M. Engelbart
     fullname: Mathis Engelbart
     organization: Technical University Munich
-    email: mathis.engelbart@tum.de
+    email: mathis.engelbart@gmail.com
  -
     ins: J. Ott
     fullname: Jörg Ott
@@ -561,23 +561,25 @@ parameters.
 
 ## Media Type Definition {#media-type}
 
-> **Note**: Template from {{Section 10 of ?RFC4288}}
+This section describes the media type registration following {{!RFC6838}} and
+{{!RFC4855}}.
 
 {: vspace="0"}
 **Type name**:
   : application
 
 **Subtype name**:
-  : GPCC
+  : gpcc
 
-**Required Parameters**:
+**Required parameters**:
   : profile-compatibility, level-idc. See {{required-parameters-definition}}.
 
-**Optional Parameters**:
+**Optional parameters**:
   : N/A
 
 **Encoding considerations**:
-  : This type is only defined for transfer via RTP {{!RFC3550}}.
+  : This media type is framed and contains binary data (see {{Section 4.8 of
+  RFC6838}}).
 
 **Security considerations**:
   : See {{security-considerations}}.
@@ -586,11 +588,10 @@ parameters.
   : N/A
 
 **Published specification**:
-  : Please refer to <**TODO**: Reference this document> and
-  {{ISO.IEC.23090-9}}.
+  : RFC XXXX and {{ISO.IEC.23090-9}}.
 
 **Applications that use this media type**:
-  : Any application that relies on GPCC-based point cloud transmission over RTP
+  : Any application that relies on G-PCC-based point cloud transmission over RTP.
 
 **Fragment identifier considerations**:
   : N/A
@@ -605,13 +606,17 @@ parameters.
   : COMMON
 
 **Restrictions on usage**:
-  : N/A
+  : This media type depends on RTP framing and is only defined for transfer via
+  RTP {{!RFC3550}}. Transfer within other framing protocols is not defined.
 
 **Author**:
-  : See Authors' Addresses section of <**TODO**: Reference this document>
+  : See the Authors' Addresses section of RFC XXXX.
 
 **Change controller**:
-  : IETF <avtcore@ietf.org>
+  : IETF <avt@ietf.org>
+
+**Provisional registration? (standards tree only)**:
+  : No
 
 ## Required Parameters Definition {#required-parameters-definition}
 
@@ -647,11 +652,11 @@ parameters.
 
 ### Mapping of Payload Type Parameters to SDP
 
-The media type application/GPCC string is mapped to fields in the Session
+The media type application/gpcc string is mapped to fields in the Session
 Description Protocol (SDP) {{!RFC8866}} as follows:
 
 * The media name in the "m=" line of SDP MUST be application.
-* The encoding name in the "a=rtpmap" line of SDP MUST be GPCC (the media
+* The encoding name in the "a=rtpmap" line of SDP MUST be gpcc (the media
   subtype).
 * The clock rate in the "a=rtpmap" line MUST be 90000.
 * The parameters *profile-compatibility* and *level-idc* MUST be included in the
@@ -665,7 +670,7 @@ conforming to the Simple profile at level 4:
 
 ~~~
 m=application 49170 RTP/AVP 96
-a=rtpmap:96 GPCC/90000
+a=rtpmap:96 gpcc/90000
 a=fmtp:96 profile-compatibility=800000;level-idc=80
 ~~~
 
@@ -675,9 +680,9 @@ conforming to the Simple profile up to level 4 on payload type 97:
 
 ~~~
 m=application 49170 RTP/AVP 96 97
-a=rtpmap:96 GPCC/90000
+a=rtpmap:96 gpcc/90000
 a=fmtp:96 profile-compatibility=500000;level-idc=120
-a=rtpmap:97 GPCC/90000
+a=rtpmap:97 gpcc/90000
 a=fmtp:97 profile-compatibility=800000;level-idc=80
 a=sendrecv
 ~~~
@@ -687,7 +692,7 @@ up to level 4. It accepts payload type 96 and removes payload type 97:
 
 ~~~
 m=application 49172 RTP/AVP 96
-a=rtpmap:96 GPCC/90000
+a=rtpmap:96 gpcc/90000
 a=fmtp:96 profile-compatibility=100000;level-idc=80
 a=sendrecv
 ~~~
@@ -840,7 +845,7 @@ confidentiality mechanisms appropriate for the captured content.
 Note to RFC Editor: This section may be removed after carrying out all the
 instructions of this section.
 
-TODO: Consider
+Please replace "RFC XXXX" with the RFC number of this document.
 
 --- back
 
