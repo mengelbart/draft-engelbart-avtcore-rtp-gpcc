@@ -576,10 +576,10 @@ optional parameters that can be used with it.
   : GPCC
 
 **Required Parameters**:
-  : None
+  : profile-compatibility, level-idc. See {{required-parameters-definition}}.
 
 **Optional Parameters**:
-  : profile-level-id **TODO**: add list from section {{optional-parameters-definition}}
+  : **TODO**: add list from section {{optional-parameters-definition}}
 
 **Encoding considerations**:
   : This type is only defined for transfer via RTP {{!RFC3550}}.
@@ -618,15 +618,37 @@ optional parameters that can be used with it.
 **Change controller**:
   : IETF <avtcore@ietf.org>
 
-## Optional Parameters Definition {#optional-parameters-definition}
+## Required Parameters Definition {#required-parameters-definition}
 
-**profile-level-id**:
-  : The profile-level-id is a base16 {{!RFC4648}} (hexadecimal) representation
-  of one byte containing the flags indicating support or conformance to the
-  G-PCC profiles and levels. The first four bits are flags indicating support
-  for the profiles *Simple*, *Predictive*, *Dense* and *Main*, while the last
-  four bits indicate the highest level that the decoder supports or a bitstream
-  conforms to.
+{: vspace="0"}
+**profile-compatibility**:
+  : A base16 {{!RFC4648}} (hexadecimal) representation of three bytes. The first
+  22 bits, most significant bit first, are, in this order,
+  `simple_profile_compliant`, `dense_profile_compliant`,
+  `predictive_profile_compliant`, `main_profile_compliant`, and
+  `reserved_profile_18bits` as defined in the sequence parameter set of
+  {{ISO.IEC.23090-9}}, Section 7.3.2.1. The last two bits MUST be set to 0 and
+  MUST be ignored by receivers. They do not correspond to the
+  `slice_reordering_constraint` and `unique_point_positions_constraint` flags at
+  the same positions in the SPS. When used to describe a bitstream, the bits are
+  set to the values of the corresponding syntax elements in the SPS of the
+  bitstream. When used to describe receiver capabilities, a bit set to 1
+  indicates that the receiver supports the corresponding profile. For example,
+  `800000` indicates the Simple profile, and `100000` indicates the Main
+  profile.
+
+**level-idc**:
+  : A decimal representation of the `level_idc` syntax element of the SPS as
+  defined in {{ISO.IEC.23090-9}}, Section 7.3.2.1, i.e., 20 times the level
+  number (e.g., `80` for level 4). When used to describe a bitstream, it is the
+  level to which the bitstream conforms. When used to describe receiver
+  capabilities, it is the highest level that the receiver supports for all
+  profiles indicated in profile-compatibility. Levels are compared by their
+  `level_idc` value as specified in {{ISO.IEC.23090-9}}, Annex A.4.1. A receiver
+  that supports different levels for different profiles can offer multiple
+  payload types, each with a single level.
+
+## Optional Parameters Definition {#optional-parameters-definition}
 
 **pcc-resolution**:
 : Describes the resolution of the point cloud as number of lines, number of
@@ -674,16 +696,17 @@ Description Protocol (SDP) {{!RFC8866}} as follows:
 * The encoding name in the "a=rtpmap" line of SDP MUST be GPCC (the media
   subtype).
 * The clock rate in the "a=rtpmap" line MUST be 90000.
-* The optional parameters *profile-level-id*, ... when present, MUST be included
-  in the "a=fmtp" line of SDP. The fmtp line is expressed as a media type
-  string, in the form of a semicolon-separated list of parameter=value pairs.
+* The parameters *profile-compatibility*, *level-idc*, and, when present, the
+  optional parameters MUST be included in the "a=fmtp" line of SDP. The fmtp
+  line is expressed as a media type string, in the form of a semicolon-separated
+  list of parameter=value pairs.
 
 ### Example
 
 ~~~
 m=application 54321 RTP/AVPF 95
 a=rtpmap:95 GPCC/90000
-a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
+a=fmtp:95 profile-compatibility=800000;level-idc=80;
           --
           -- point cloud resolution
           pcc-resolution: #lines #points-per-line #depth-resolution;
@@ -704,40 +727,40 @@ a=fmtp:95 profile-level-id=84; // 0x84 => 0b10000100 => simple profile, level 4
 
 ### Offer/Answer Considerations
 
-> **TODO**: Are theses rules correct for G-PCC and do we need considerations for
-> other parameters?
-
 When the payload format is offered over RTP using SDP in an Offer/Answer model
-as described in {{!RFC3264}} for negotiation for unicast usage, the following
-limitations and rules apply:
+as described in {{!RFC3264}}, the following rules apply to the parameters
+profile-compatibility and level-idc:
 
-* The parameter identifying a media format configuration for G-PCC is
-  profile-levle-id. This media format configuration parameter MUST be used
-  symmetrically; that is, the answerer MUST either maintain this configuration
-  parameter or remove the media format (payload type) completely if it is not
-  supported.
-* The G-PCC stream sent by either the offerer or the answerer MUST be encoded
-  with a profile and level, lesser or equal to the values of the level and
-  profile declared in the SDP by the receiving agent.
-
+* In an offer or answer for a stream with direction sendrecv or recvonly, the
+  parameters declare the profiles and level that the offerer or answerer is able
+  to receive. The values in the answer are independent of the values in the
+  offer.
+* In an offer for a stream with direction sendonly, the parameters describe the
+  bitstream that the offerer will send. An answerer that is able to receive the
+  bitstream MUST use the same values in the answer. Otherwise, it MUST remove
+  the payload type from the answer.
+* A bitstream sent to a receiver MUST indicate conformance to at least one of
+  the profiles indicated by the receiver in profile-compatibility, and MUST
+  conform to a level that is lower than or equal to the level indicated by the
+  receiver in level-idc.
+* An offerer or answerer that is not able to send a bitstream fulfilling these
+  conditions MUST NOT send on the payload type.
+* For multicast streams, the answerer MUST use the values of the offer or remove
+  the payload type, as all receivers receive the same bitstream.
 
 ### Declarative SDP Considerations
-
-> **TODO**: Are theses rules correct for G-PCC and do we need considerations for
-> other parameters?
 
 When G-PCC over RTP is offered with SDP in a declarative style, as in Real Time
 Streaming Protocol (RTSP) {{!RFC7826}} or Session Announcement Protocol (SAP)
 {{?RFC2974}}, the following considerations are necessary.
 
-* All parameters capable of indicating both stream properties and receiver
-  capabilities are used to indicate only stream properties. In this case, the
-  parameters profile and level declare only the values used by the stream, not
-  the capabilities for receiving streams.
-* A receiver of the SDP is required to support all parameters and values of the
-  parameters provided; otherwise, the receiver MUST reject (RTSP) or not
-  participate in (SAP) the session. It falls on the creator of the session to
-  use values that are expected to be supported by the receiving application.
+* The parameters profile-compatibility and level-idc describe the bitstream that
+  is sent, not the capabilities for receiving streams.
+* A receiver MUST reject (RTSP) or not participate in (SAP) the session if it
+  does not support at least one of the indicated profiles at the indicated level
+  or higher, or if it does not support any other parameter or value provided. It
+  falls on the creator of the session to use values that are expected to be
+  supported by the receiving application.
 
 # Congestion Control
 
