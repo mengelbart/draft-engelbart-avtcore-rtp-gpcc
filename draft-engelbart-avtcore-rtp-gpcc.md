@@ -319,13 +319,14 @@ header in a manner consistent with that specification.
 ## Payload Header Usage {#payload-header}
 
 The first byte of the payload of an RTP packet is referred to as the payload
-header. The payload header consists of the Packet Type and Unit Type fields.
+header. The payload header consists of the Packet Type (PType in the figures)
+and Unit Type fields.
 
 ~~~
  0
  0 1 2 3 4 5 6 7
 +-+-+-+-+-+-+-+-+
-|Type |Unit Type|
+|PType|Unit Type|
 +-+-+-+-+-+-+-+-+
 ~~~
 {: #fig-payload-header title="General Payload Header"}
@@ -430,7 +431,7 @@ starting with the affected DU. DUs preceding it in the packet are not affected.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|Type |Unit Type|            Size               |   Data Unit  ...
+|PType|Unit Type|            Size               |   Data Unit  ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
 {: #fig-aggregation-header title="Aggregation unit format"}
