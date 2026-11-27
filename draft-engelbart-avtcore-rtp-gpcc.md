@@ -861,4 +861,6 @@ Please replace "RFC XXXX" with the RFC number of this document.
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+The authors used a large language model to assist with drafting and editing
+text in this document. The authors reviewed all generated text and take full
+responsibility for the content of this document.
