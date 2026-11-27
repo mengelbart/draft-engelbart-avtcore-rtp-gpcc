@@ -561,8 +561,8 @@ considering them lost is implementation dependent.
 
 # Payload Format Parameters
 
-This section defines the media type to use with the payload format and the
-optional parameters that can be used with it.
+This section defines the media type to use with the payload format and its
+parameters.
 
 ## Media Type Definition {#media-type}
 
@@ -579,7 +579,7 @@ optional parameters that can be used with it.
   : profile-compatibility, level-idc. See {{required-parameters-definition}}.
 
 **Optional Parameters**:
-  : **TODO**: add list from section {{optional-parameters-definition}}
+  : N/A
 
 **Encoding considerations**:
   : This type is only defined for transfer via RTP {{!RFC3550}}.
@@ -648,41 +648,6 @@ optional parameters that can be used with it.
   that supports different levels for different profiles can offer multiple
   payload types, each with a single level.
 
-## Optional Parameters Definition {#optional-parameters-definition}
-
-**pcc-resolution**:
-: Describes the resolution of the point cloud as number of lines, number of
-points per line and depth resolution.
-
-> \<#lines\> \<#points-per-line\> \<#depth-resolution\>
-
-**pcc-coverage**:
-: The field of view coverage of the sensor described by the horizontal and
-vertical angles.
-
-> \<h-angle\> \<v-angle\>
-
-**pcc-anchor**:
-: An anchor reference point for the point cloud, relative to which coordinates
-are given. This can be useful to relate multiple point clouds to each other.
-
-> \<x\> \<y\> \<z\>
-
-**pcc-orientation**:
-: The orientation of the point cloud sensor.
-
-> \<tilt\> \<pan\>
-
-**pcc-position**:
-: The location of the LiDAR or point cloud sensor relative to *pcc-anchor* and
-  *pcc-orientation*:
-
-> \<delta-x\> \<delta-y\> \<delta-z\> \<delta-tilt\> \<delta-pan\>
-
-**pcc-point-attr**:
-: A list of attributes associated with each point. Example: color,
-  reflectivity.
-
 ## SDP Parameters
 
 ### Mapping of Payload Type Parameters to SDP
@@ -690,40 +655,51 @@ are given. This can be useful to relate multiple point clouds to each other.
 The media type application/GPCC string is mapped to fields in the Session
 Description Protocol (SDP) {{!RFC8866}} as follows:
 
-> **TODO**: Add all parameters from above
-
 * The media name in the "m=" line of SDP MUST be application.
 * The encoding name in the "a=rtpmap" line of SDP MUST be GPCC (the media
   subtype).
 * The clock rate in the "a=rtpmap" line MUST be 90000.
-* The parameters *profile-compatibility*, *level-idc*, and, when present, the
-  optional parameters MUST be included in the "a=fmtp" line of SDP. The fmtp
-  line is expressed as a media type string, in the form of a semicolon-separated
-  list of parameter=value pairs.
+* The parameters *profile-compatibility* and *level-idc* MUST be included in the
+  "a=fmtp" line of SDP. The fmtp line is expressed as a media type string, in
+  the form of a semicolon-separated list of parameter=value pairs.
 
-### Example
+### Examples
+
+The following example shows the media description of an offer for a stream
+conforming to the Simple profile at level 4:
 
 ~~~
-m=application 54321 RTP/AVPF 95
-a=rtpmap:95 GPCC/90000
-a=fmtp:95 profile-compatibility=800000;level-idc=80;
-          --
-          -- point cloud resolution
-          pcc-resolution: #lines #points-per-line #depth-resolution;
-          --
-          -- field of view
-          pcc-coverage: h-angle v-angle;
-          --
-          -- optional anchor point 
-          pcc-anchor: <type> <type-specific format> "mm" x y z | "gps" lat lon alt;
-          pcc-orientation: tilt pan;
-          --
-          -- where is this lidar located (relative to possible others)
-          pcc-position: delta-x, delta-y, delta-z delta-tilt delta-pan;
-          --
-          -- which attributes are encoded per point: list of properties | profile
-          pcc-point-attr: "attr" color, reflectance;
+m=application 49170 RTP/AVP 96
+a=rtpmap:96 GPCC/90000
+a=fmtp:96 profile-compatibility=800000;level-idc=80
 ~~~
+
+In the following example, the offerer is able to receive bitstreams conforming
+to the Dense or Main profile up to level 6 on payload type 96, and bitstreams
+conforming to the Simple profile up to level 4 on payload type 97:
+
+~~~
+m=application 49170 RTP/AVP 96 97
+a=rtpmap:96 GPCC/90000
+a=fmtp:96 profile-compatibility=500000;level-idc=120
+a=rtpmap:97 GPCC/90000
+a=fmtp:97 profile-compatibility=800000;level-idc=80
+a=sendrecv
+~~~
+
+The answerer is only able to receive bitstreams conforming to the Main profile
+up to level 4. It accepts payload type 96 and removes payload type 97:
+
+~~~
+m=application 49172 RTP/AVP 96
+a=rtpmap:96 GPCC/90000
+a=fmtp:96 profile-compatibility=100000;level-idc=80
+a=sendrecv
+~~~
+
+The offerer sends a bitstream conforming to the Main profile at level 4 or
+lower. The answerer sends a bitstream conforming to the Dense or Main profile
+at level 6 or lower.
 
 ### Offer/Answer Considerations
 
