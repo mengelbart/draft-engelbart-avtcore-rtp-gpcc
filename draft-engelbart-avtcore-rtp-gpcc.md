@@ -437,24 +437,68 @@ An example of an aggregation unit packet with two data unit payloads is shown in
 
 ### Fragmentation Unit {#fragmentation-unit}
 
-Fragmentation units allow fragmentation of single DUs into
-multiple RTP packets without cooperation from the G-PCC encoder. Fragments of
-the same DU MUST be sent in consecutive order with ascending RTP
-sequence numbers (with no other RTP packets within the same RTP stream being
-sent between the first and last fragment).
+Fragmentation units allow fragmentation of single DUs into multiple RTP packets
+without cooperation from the G-PCC encoder. A DU that does not fit into a single
+RTP packet without exceeding the path MTU SHOULD be fragmented. Fragments of the
+same DU MUST be sent in consecutive order with ascending RTP sequence numbers
+(with no other RTP packets within the same RTP stream being sent between the
+first and last fragment).
 
 Aggregation packets MUST NOT be fragmented. Fragmentation units MUST NOT be
 nested, i.e., a fragmentation unit cannot contain a subset of another
 fragmentation unit.
 
-The timestamp of all fragmentation units MUST be set to the same value: the
-timestamp of the DU that is carried in the fragmentation unit
-packets.
+A fragmentation unit consists of the payload header followed by a fragment of
+the DU. The fragment is a sequence of consecutive bytes of the DU, without the
+TLV header. The DU is the concatenation of the fragments of all fragmentation
+units of the series, in RTP sequence number order. {{fig-fragmentation-unit}}
+shows the format of a fragmentation unit.
+
+~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| PayloadHeader |                                               |
++-+-+-+-+-+-+-+-+                                               |
+|                         DU Fragment                           |
+|                                                               |
+|                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                               :...OPTIONAL RTP padding        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~
+{: #fig-fragmentation-unit title="Fragmentation unit payload"}
 
 The type field of the first packet of a series of fragmentation units MUST be
 set to 2 (binary `010`), the type field of the last packet in the series MUST be
 set to four (binary `100`), and the type field of all packets between the first
 and last packet of the fragmented unit MUST have the value three (binary `011`).
+
+The Unit-Type field of every fragmentation unit MUST be set to the type of the
+fragmented DU.
+
+A fragmented DU MUST be carried in at least two fragmentation units, i.e., a DU
+MUST NOT be sent as a single fragmentation unit. Each fragmentation unit MUST
+carry a non-empty fragment.
+
+The timestamp of all fragmentation units MUST be set to the same value: the
+timestamp of the DU that is carried in the fragmentation unit packets.
+
+A receiver reassembles a DU from a series of fragmentation units that starts
+with a first fragmentation unit (`010`), continues with zero or more middle
+fragmentation units (`011`), and ends with a last fragmentation unit (`100`),
+all with consecutive RTP sequence numbers, the same RTP timestamp, and the same
+Unit-Type. A receiver MUST treat the series as incomplete and MUST discard the
+fragments received so far if any of the following occurs:
+
+* a gap in RTP sequence numbers between the first and the last fragmentation
+  unit,
+* a middle or last fragmentation unit that is not preceded by a first
+  fragmentation unit of the same series,
+* a first fragmentation unit, or a packet other than a fragmentation unit,
+  before the last fragmentation unit of the series,
+* a change in RTP timestamp or Unit-Type within the series.
+
+A receiver MUST NOT pass incomplete DUs to the decoder.
 
 # Packetization Rules and Depacketization Rules
 
@@ -486,8 +530,7 @@ appear in the packet. To do so, a receiver performs the following steps:
   number.
 * The DUs are extracted from each packet according to the packet type
   ({{payload-structures}}). Fragments of a DU are reassembled as described in
-  {{fragmentation-unit}}. A DU for which one or more fragments are missing is
-  incomplete and is discarded.
+  {{fragmentation-unit}}, which also defines the handling of incomplete DUs.
 * Each DU is passed to the decoder as a TLV encapsulation structure as defined
   in Annex B of {{ISO.IEC.23090-9}}, with `tlv_type` set to the Unit-Type of
   the payload header and `tlv_num_payload_bytes` set to the length of the DU in
