@@ -10,14 +10,13 @@
 <meta content="Lukasz Kondrad" name="author">
 <meta content="
        This memo describes an RTP payload format for geometry-based point cloud
-compression (G-PCC) ( ). The RTP payload format defined in
-this document supports the packetization of one or more data units in an RTP
-packet payload and the fragmentation of a single data unit into multiple RTP
-packets. This memo also describes congestion control for a practical solution
-for the real-time streaming of point clouds.
-Finally, the document defines parameters that may be used to select
-optional features of the payload format or signal properties of the RTP stream.
-The parameters can be used with the Session Description Protocol (SDP). 
+compression (G-PCC). The RTP payload format defined in this document supports
+the packetization of one or more data units in an RTP packet payload and the
+fragmentation of a single data unit into multiple RTP packets. This memo also
+discusses congestion control and rate adaptation for the real-time streaming of
+point clouds. Finally, the document defines media type parameters that signal
+the profile and level of the G-PCC bitstream, and their use with the Session
+Description Protocol (SDP). 
     " name="description">
 <meta content="xml2rfc 3.35.0" name="generator">
 <meta content="RTP" name="keyword">
@@ -1080,11 +1079,11 @@ svg {
 <dd class="authors">
 <div class="author">
       <div class="author-name">M. Engelbart</div>
-<div class="org">Technical University Munich</div>
+<div class="org">Technical University of Munich</div>
 </div>
 <div class="author">
       <div class="author-name">J. Ott</div>
-<div class="org">Technical University Munich</div>
+<div class="org">Technical University of Munich</div>
 </div>
 <div class="author">
       <div class="author-name">L. Kondrad</div>
@@ -1097,14 +1096,13 @@ svg {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This memo describes an RTP payload format for geometry-based point cloud
-compression (G-PCC) (<span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>). The RTP payload format defined in
-this document supports the packetization of one or more data units in an RTP
-packet payload and the fragmentation of a single data unit into multiple RTP
-packets. This memo also describes congestion control for a practical solution
-for the real-time streaming of point clouds.
-Finally, the document defines parameters that may be used to select
-optional features of the payload format or signal properties of the RTP stream.
-The parameters can be used with the Session Description Protocol (SDP).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+compression (G-PCC). The RTP payload format defined in this document supports
+the packetization of one or more data units in an RTP packet payload and the
+fragmentation of a single data unit into multiple RTP packets. This memo also
+discusses congestion control and rate adaptation for the real-time streaming of
+point clouds. Finally, the document defines media type parameters that signal
+the profile and level of the G-PCC bitstream, and their use with the Session
+Description Protocol (SDP).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1199,7 +1197,7 @@ The parameters can be used with the Session Description Protocol (SDP).<a href="
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-payload-format" class="internal xref">Payload Format</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-transmission-modes" class="internal xref">Transmission Modes</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-transmission-mode" class="internal xref">Transmission Mode</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-rtp-header-usage" class="internal xref">RTP Header Usage</a></p>
@@ -1211,13 +1209,13 @@ The parameters can be used with the Session Description Protocol (SDP).<a href="
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-payload-structures" class="internal xref">Payload Structures</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4.2.1">
-                    <p id="section-toc.1-1.4.2.4.2.1.1"><a href="#section-4.4.1" class="auto internal xref">4.4.1</a>.  <a href="#name-single-unit" class="internal xref">Single Unit</a></p>
+                    <p id="section-toc.1-1.4.2.4.2.1.1"><a href="#section-4.4.1" class="auto internal xref">4.4.1</a>.  <a href="#name-single-unit-packet" class="internal xref">Single Unit Packet</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4.2.2">
                     <p id="section-toc.1-1.4.2.4.2.2.1"><a href="#section-4.4.2" class="auto internal xref">4.4.2</a>.  <a href="#name-aggregation-packet" class="internal xref">Aggregation Packet</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4.2.3">
-                    <p id="section-toc.1-1.4.2.4.2.3.1"><a href="#section-4.4.3" class="auto internal xref">4.4.3</a>.  <a href="#name-fragmentation-unit" class="internal xref">Fragmentation Unit</a></p>
+                    <p id="section-toc.1-1.4.2.4.2.3.1"><a href="#section-4.4.3" class="auto internal xref">4.4.3</a>.  <a href="#name-fragmentation-packet" class="internal xref">Fragmentation Packet</a></p>
 </li>
                 </ul>
 </li>
@@ -1225,6 +1223,14 @@ The parameters can be used with the Session Description Protocol (SDP).<a href="
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-packetization-rules-and-dep" class="internal xref">Packetization Rules and Depacketization Rules</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-packetization-rules" class="internal xref">Packetization Rules</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-depacketization-rules" class="internal xref">Depacketization Rules</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-payload-format-parameters" class="internal xref">Payload Format Parameters</a></p>
@@ -1233,7 +1239,7 @@ The parameters can be used with the Session Description Protocol (SDP).<a href="
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-media-type-definition" class="internal xref">Media Type Definition</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-optional-parameters-definit" class="internal xref">Optional Parameters Definition</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-required-parameters-definit" class="internal xref">Required Parameters Definition</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-sdp-parameters" class="internal xref">SDP Parameters</a></p>
@@ -1242,7 +1248,7 @@ The parameters can be used with the Session Description Protocol (SDP).<a href="
                     <p id="section-toc.1-1.6.2.3.2.1.1"><a href="#section-6.3.1" class="auto internal xref">6.3.1</a>.  <a href="#name-mapping-of-payload-type-par" class="internal xref">Mapping of Payload Type Parameters to SDP</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3.2.2">
-                    <p id="section-toc.1-1.6.2.3.2.2.1"><a href="#section-6.3.2" class="auto internal xref">6.3.2</a>.  <a href="#name-example" class="internal xref">Example</a></p>
+                    <p id="section-toc.1-1.6.2.3.2.2.1"><a href="#section-6.3.2" class="auto internal xref">6.3.2</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3.2.3">
                     <p id="section-toc.1-1.6.2.3.2.3.1"><a href="#section-6.3.3" class="auto internal xref">6.3.3</a>.  <a href="#name-offer-answer-considerations" class="internal xref">Offer/Answer Considerations</a></p>
@@ -1298,10 +1304,9 @@ Point clouds are commonly used to represent three-dimensional scans of
 environments or objects. The payload format enables the streaming of compressed
 point clouds in real-time applications. It applies to various use cases, such as
 autonomous vehicles and virtual reality.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">In addition to describing the payload format, this document also includes
-examples of the payload format, provides guidance on how to negotiate the
-parameters to be used with the format, and discusses congestion control and rate
-adaptation of point cloud streaming applications.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">In addition to describing the payload format, this document provides guidance
+on how to negotiate the parameters to be used with the format, and discusses
+congestion control and rate adaptation of point cloud streaming applications.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <div id="background-on-point-clouds">
 <section id="section-1.1">
         <h3 id="name-background-on-point-clouds">
@@ -1330,20 +1335,21 @@ Group (MPEG) has published a Geometry-based Point Cloud Compression (G-PCC)
 standard in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>. The G-PCC codec takes as input an unordered
 list of points, optional attributes, and metadata. All points have the same
 number, type, and order of attributes. Attributes can, for example, be the
-color, opacity, reflectance, or frame number of the associated point.
-Compression is defined separately for geometry and attributes. The attribute
-coding depends on the decoded geometry. Thus, geometry encoding and decoding
-happen before attribute encoding and decoding.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.2-2">G-PCC users can choose between two methods for geometry coding and three for
+color, opacity, reflectance, normal vector, material identifier, frame number,
+or frame index of the associated point. Compression is defined separately for
+geometry and attributes. The attribute coding depends on the decoded geometry.
+Thus, geometry encoding and decoding happen before attribute encoding and
+decoding.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">G-PCC users can choose between two methods for geometry coding and four for
 attribute coding. The geometry coding method called <em>Octree Coding</em> is a general
 compression method, while <em>Predictive tree</em> coding specifically targets low
-latency applications. The methods for attribute coding are called Region
-Adaptive Hierarchical Transform (RAHT) coding, Predicting Transform, and Lifting
-Transform.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
-<p id="section-1.2-3">The output of the encoding process is a sequence of Data Units (DUs). Each
-DU has a type that describes its layout.
-<a href="#_table-gpcc-unit-type-descriptions" class="auto internal xref">Table 1</a> lists the ten different types of DUs
-defined in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
+latency applications. The methods for attribute coding are Region Adaptive
+Hierarchical Transform (RAHT) coding, Level of Detail (LoD) with Predicting
+Transform, LoD with Lifting Transform, and raw attribute data
+(<span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Table 11).<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.2-3">The output of the encoding process is a sequence of Data Units (DUs). Each DU
+has a type that describes its layout. <a href="#_table-gpcc-unit-type-descriptions" class="auto internal xref">Table 1</a>
+lists the ten different types of DUs defined in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
 <span id="name-g-pcc-data-unit-types"></span><div id="_table-gpcc-unit-type-descriptions">
 <table class="center" id="table-1">
           <caption>
@@ -1352,7 +1358,7 @@ defined in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">Type</th>
+              <th class="text-left" rowspan="1" colspan="1">DU type</th>
               <th class="text-left" rowspan="1" colspan="1">Description</th>
             </tr>
           </thead>
@@ -1408,14 +1414,25 @@ geometry information and points attributes information. Geometry and attribute
 data units hold references to their associated parameter sets, and each
 referenced parameter set must be available before decoding of the data unit is
 possible.<a href="#section-1.2-6" class="pilcrow">¶</a></p>
-<p id="section-1.2-7">Coded point clouds do not have dependencies between frames, i.e., decoding a
+<p id="section-1.2-7">A coded point cloud frame consists of zero or more slices. A slice consists of a
+GDU, optional redundant GDUs, and an ADU or defaulted attribute DU per
+attribute. A dependent slice requires the preceding slice to be decoded first
+(<span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Section 6.4.5). A tile inventory DU groups slices into
+tiles with bounding boxes for spatial random access (Section 6.4.7).<a href="#section-1.2-7" class="pilcrow">¶</a></p>
+<p id="section-1.2-8">A frame boundary marker DU marks the end of a frame. A defaulted attribute DU
+sets one attribute value for all points in a slice. A frame-specific attribute
+properties DU overrides SPS attribute properties for a single frame. A user data
+DU carries application data that the decoder does not interpret.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
+<p id="section-1.2-9">Coded point clouds do not have dependencies between frames, i.e., decoding a
 point cloud frame is always possible without depending on a previous or
 following frame in a sequence. However, future versions of G-PCC might support
-inter-frame prediction.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
-<p id="section-1.2-8">Annex A of <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span> describes profiles and levels of the G-PCC codec.
+inter-frame prediction.<a href="#section-1.2-9" class="pilcrow">¶</a></p>
+<p id="section-1.2-10">Annex A of <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span> describes profiles and levels of the G-PCC codec.
 Decoders can support different profiles and levels. Profiles are subsets of
-algorithmic features of the codec specification. A decoder that supports a
-specific profile must be able to decode a bitstream conforming to that profile.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
+algorithmic features of the codec specification. A decoder that conforms to a
+profile at a specific level must be able to decode all bitstreams that conform
+to that profile at a level lower than or equal to the decoder's level
+(<span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Section A.3.2).<a href="#section-1.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1452,7 +1469,8 @@ convenience.<a href="#section-3-1" class="pilcrow">¶</a></p>
           <dd class="break"></dd>
 <dt id="section-3.1-1.3"><strong>Bitstream</strong></dt>
           <dd style="margin-left: 1.5em" id="section-3.1-1.4">
-            <p id="section-3.1-1.4.1">A sequence of bits.<a href="#section-3.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-1.4.1">Sequence of bits, in the form of encapsulated <em>data units</em>, that represents
+   a coded <em>point cloud sequence</em>.<a href="#section-3.1-1.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-3.1-1.5"><strong>Bounding Box</strong></dt>
@@ -1494,10 +1512,10 @@ convenience.<a href="#section-3-1" class="pilcrow">¶</a></p>
           <dd class="break"></dd>
 <dt id="section-3.1-1.19"><strong>Point Cloud Sequence</strong></dt>
           <dd style="margin-left: 1.5em" id="section-3.1-1.20">
-            <p id="section-3.1-1.20.1">Sequence of one or more <em>pont clouds</em>.<a href="#section-3.1-1.20.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-1.20.1">Sequence of one or more <em>point clouds</em>.<a href="#section-3.1-1.20.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-3.1-1.21"><strong>Poisition</strong></dt>
+<dt id="section-3.1-1.21"><strong>Point Position</strong></dt>
           <dd style="margin-left: 1.5em" id="section-3.1-1.22">
             <p id="section-3.1-1.22.1">Three dimensional coordinates of a <em>point</em>.<a href="#section-3.1-1.22.1" class="pilcrow">¶</a></p>
 </dd>
@@ -1580,21 +1598,20 @@ convenience.<a href="#section-3-1" class="pilcrow">¶</a></p>
       <h2 id="name-payload-format">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-payload-format" class="section-name selfRef">Payload Format</a>
       </h2>
-<p id="section-4-1">This section describes the details of the RTP payload format. <a href="#rtp-header" class="auto internal xref">Section 4.2</a>
+<p id="section-4-1">This section describes the details of the RTP payload format.
+<a href="#transmission-mode" class="auto internal xref">Section 4.1</a> describes the supported transmission mode, <a href="#rtp-header" class="auto internal xref">Section 4.2</a>
 describes the usage of the standard RTP header fields, <a href="#payload-header" class="auto internal xref">Section 4.3</a>
 describes the details of the payload header following the RTP header, and
-<a href="#payload-structures" class="auto internal xref">Section 4.4</a> gives details about available packetization modes and the
-specifics of their respective formats.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<div id="transmission-modes">
+<a href="#payload-structures" class="auto internal xref">Section 4.4</a> gives details about the available payload structures and
+the specifics of their respective formats.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="transmission-mode">
 <section id="section-4.1">
-        <h3 id="name-transmission-modes">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-transmission-modes" class="section-name selfRef">Transmission Modes</a>
+        <h3 id="name-transmission-mode">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-transmission-mode" class="section-name selfRef">Transmission Mode</a>
         </h3>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-4.1-1.1">
-            <p id="section-4.1-1.1.1"><strong>TODO</strong>: Do we need this section on transmission modes similar to other payload formats to define SRST, MRST, and MRMT?<a href="#section-4.1-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<p id="section-4.1-1">This payload format supports only single RTP stream transmission. A G-PCC
+bitstream <span class="bcp14">MUST</span> be carried in a single RTP stream, as defined in <span>[<a href="#RFC7656" class="cite xref">RFC7656</a>]</span>, on
+a single RTP session.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rtp-header">
@@ -1602,7 +1619,9 @@ specifics of their respective formats.<a href="#section-4-1" class="pilcrow">¶<
         <h3 id="name-rtp-header-usage">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-rtp-header-usage" class="section-name selfRef">RTP Header Usage</a>
         </h3>
-<p id="section-4.2-1">The format of the RTP header is specified in <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span> and replicated in <a href="#fig-header" class="auto internal xref">Figure 1</a> for convenience. This payload format uses the fields of the header in a manner consistent with that specification.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">The format of the RTP header is specified in <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span> and replicated in
+<a href="#fig-header" class="auto internal xref">Figure 1</a> for convenience. This payload format uses the fields of the
+header in a manner consistent with that specification.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <span id="name-rtp-header-format-as-specif"></span><div id="fig-header">
 <figure id="figure-1">
           <div class="alignLeft art-text artwork" id="section-4.2-2.1">
@@ -1625,49 +1644,40 @@ specifics of their respective formats.<a href="#section-4-1" class="pilcrow">¶<
 <a href="#name-rtp-header-format-as-specif" class="selfRef">RTP Header format as specified in RFC 3550</a>
           </figcaption></figure>
 </div>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-4.2-3.1">
-            <p id="section-4.2-3.1.1"><strong>TODO</strong>: if we add a dedicated subsection on SRST/SRMT/MRMT, add the
-following statement:<a href="#section-4.2-3.1.1" class="pilcrow">¶</a></p>
-<p id="section-4.2-3.1.2">When MRST or MRMT is in use, if an access unit appears in multiple RTP
-streams, the marker bit is set on each RTP stream's last packet of the access
-unit.<a href="#section-4.2-3.1.2" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span class="break"></span><dl class="dlNewline" id="section-4.2-4">
-          <dt id="section-4.2-4.1"><strong>Marker bit (M): 1 bit</strong></dt>
-          <dd style="margin-left: 1.5em" id="section-4.2-4.2">
-            <p id="section-4.2-4.2.1">Set to 1 for the last packet of a point cloud frame carried in the current RTP stream.<a href="#section-4.2-4.2.1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-4.2-3">
+          <dt id="section-4.2-3.1"><strong>Marker bit (M): 1 bit</strong></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-3.2">
+            <p id="section-4.2-3.2.1">Set to 1 for the last packet of a point cloud frame.<a href="#section-4.2-3.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-4.2-4.3"><strong>Payload Type (PT): 7 bits</strong></dt>
-          <dd style="margin-left: 1.5em" id="section-4.2-4.4">
-            <p id="section-4.2-4.4.1">The assignment of an RTP payload type for this new packet format is outside
+<dt id="section-4.2-3.3"><strong>Payload Type (PT): 7 bits</strong></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-3.4">
+            <p id="section-4.2-3.4.1">The assignment of an RTP payload type for this new packet format is outside
    the scope of this document and will not be specified here. The assignment of
    a payload type has to be performed either through the profile used or in a
-   dynamic way.<a href="#section-4.2-4.4.1" class="pilcrow">¶</a></p>
+   dynamic way.<a href="#section-4.2-3.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-4.2-4.5"><strong>Sequence Number (SN): 16 bits</strong></dt>
-          <dd style="margin-left: 1.5em" id="section-4.2-4.6">
-            <p id="section-4.2-4.6.1">Set and used in accordance with <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span>.<a href="#section-4.2-4.6.1" class="pilcrow">¶</a></p>
+<dt id="section-4.2-3.5"><strong>Sequence Number (SN): 16 bits</strong></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-3.6">
+            <p id="section-4.2-3.6.1">Set and used in accordance with <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span>.<a href="#section-4.2-3.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-4.2-4.7"><strong>Timestamp: 32 bits</strong></dt>
-          <dd style="margin-left: 1.5em" id="section-4.2-4.8">
-            <p id="section-4.2-4.8.1">The RTP timestamp is set to the sampling timestamp of the content. A 90 kHz
-   clock rate <span class="bcp14">MUST</span> be used. The sampling timestamp of the content is the
-   reconstruction time. It denotes the earliest sampling time of all points in the
-   point cloud frame to which the data unit transmitted in the packet belongs.
-   If the data unit has no timing properties (e.g., parameter sets), the RTP
-   timestamp is set to the RTP timestamp of the first data unit that references
-   the parameter set. If the packet is an aggregation unit packet, all data
-   units <span class="bcp14">MUST</span> have the same timestamp.<a href="#section-4.2-4.8.1" class="pilcrow">¶</a></p>
+<dt id="section-4.2-3.7"><strong>Timestamp: 32 bits</strong></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-3.8">
+            <p id="section-4.2-3.8.1">A 90 kHz clock rate <span class="bcp14">MUST</span> be used. The RTP timestamp <span class="bcp14">MUST</span> be set to the
+   sampling time of the point cloud frame to which the DUs carried in the packet
+   belong. The sampling time of a point cloud frame is the earliest sampling
+   time of all points in the frame. For an empty frame, the sampling time is the
+   time at which the frame was captured, e.g., the start of the sensor scan that
+   produced no points. DUs sent between the last DU of one frame and the first
+   DU of the next frame, such as parameter sets, tile inventories, or user data,
+   use the RTP timestamp of the next frame.<a href="#section-4.2-3.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-4.2-4.9"><strong>Synchronization source (SSRC): 32 bits</strong></dt>
-          <dd style="margin-left: 1.5em" id="section-4.2-4.10">
-            <p id="section-4.2-4.10.1">Used to identify the source of the RTP packets.<a href="#section-4.2-4.10.1" class="pilcrow">¶</a></p>
+<dt id="section-4.2-3.9"><strong>Synchronization source (SSRC): 32 bits</strong></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-3.10">
+            <p id="section-4.2-3.10.1">Used to identify the source of the RTP packets.<a href="#section-4.2-3.10.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1678,8 +1688,9 @@ unit.<a href="#section-4.2-3.1.2" class="pilcrow">¶</a></p>
         <h3 id="name-payload-header-usage">
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-payload-header-usage" class="section-name selfRef">Payload Header Usage</a>
         </h3>
-<p id="section-4.3-1">The first bytes of the payload of an RTP packet are referred to as the payload
-header. The payload header consists of a packet type and unit type field.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-1">The first byte of the payload of an RTP packet is referred to as the payload
+header. The payload header consists of the Packet Type (PType in the figures)
+and Unit Type fields.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
 <span id="name-general-payload-header"></span><div id="fig-payload-header">
 <figure id="figure-2">
           <div class="alignLeft art-text artwork" id="section-4.3-2.1">
@@ -1687,7 +1698,7 @@ header. The payload header consists of a packet type and unit type field.<a href
  0
  0 1 2 3 4 5 6 7
 +-+-+-+-+-+-+-+-+
-| Typ |Unit-Type|
+|PType|Unit Type|
 +-+-+-+-+-+-+-+-+
 </pre>
 </div>
@@ -1696,18 +1707,25 @@ header. The payload header consists of a packet type and unit type field.<a href
           </figcaption></figure>
 </div>
 <span class="break"></span><dl class="dlNewline" id="section-4.3-3">
-          <dt id="section-4.3-3.1"><strong>Typ: 3 bits</strong></dt>
+          <dt id="section-4.3-3.1"><strong>Packet Type: 3 bits</strong></dt>
           <dd style="margin-left: 1.5em" id="section-4.3-3.2">
             <p id="section-4.3-3.2.1">Type of the packet. This field indicates if the packet is a single unit
-  packet, an aggregation unit packet, or a fragmentation unit packet. See
-  <a href="#payload-structures" class="auto internal xref">Section 4.4</a> for details.<a href="#section-4.3-3.2.1" class="pilcrow">¶</a></p>
+  packet, an aggregation packet, or a fragmentation packet. See
+  <a href="#payload-structures" class="auto internal xref">Section 4.4</a> for details. Senders <span class="bcp14">MUST NOT</span> use the values marked as
+  reserved in <a href="#_table-type-field" class="auto internal xref">Table 2</a>. Receivers <span class="bcp14">MUST</span> discard packets with a
+  reserved Packet Type value.<a href="#section-4.3-3.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-4.3-3.3"><strong>Unit-Type: 5 bits</strong></dt>
+<dt id="section-4.3-3.3"><strong>Unit Type: 5 bits</strong></dt>
           <dd style="margin-left: 1.5em" id="section-4.3-3.4">
-            <p id="section-4.3-3.4.1">The type of the following data unit. This field specifies the type field
-  from the type-length-value encapsulation defined in Annex-B of G-PCC
-  <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span> and shown in <a href="#_table-gpcc-unit-type-descriptions" class="auto internal xref">Table 1</a>.<a href="#section-4.3-3.4.1" class="pilcrow">¶</a></p>
+            <p id="section-4.3-3.4.1">The type of the following data unit. This field carries the <code>tlv_type</code> value
+  of the type-length-value encapsulation defined in Annex B of
+  <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span> and shown in <a href="#_table-gpcc-unit-type-descriptions" class="auto internal xref">Table 1</a>. The
+  <code>tlv_type</code> field in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span> is 8 bits long, but only values 0 to
+  31 can be carried in the Unit Type field. DUs with a type larger than 31
+  cannot be carried by this payload format. Senders <span class="bcp14">MUST NOT</span> send DUs with a
+  Unit Type value not listed in <a href="#_table-gpcc-unit-type-descriptions" class="auto internal xref">Table 1</a>. Receivers
+  <span class="bcp14">MUST</span> discard such DUs.<a href="#section-4.3-3.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1718,48 +1736,48 @@ header. The payload header consists of a packet type and unit type field.<a href
         <h3 id="name-payload-structures">
 <a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-payload-structures" class="section-name selfRef">Payload Structures</a>
         </h3>
-<p id="section-4.4-1">Three different RTP packet payload structures are specified: Single Unit
-Packets, Aggregation Unit Packets, and Fragmentation Unit Packets. A receiver
-can identify the payload structure by the type field of
-the payload header. The type field indicates whether the unit is a single unit,
-an aggregation unit, or the first, last, or middle part of a fragmentation unit
-packet. The type field <span class="bcp14">MUST</span> be set according to <a href="#_table-type-field" class="auto internal xref">Table 2</a>.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
-<span id="name-type-field-values"></span><div id="_table-type-field">
+<p id="section-4.4-1">Three different RTP packet payload structures are specified: single unit
+packets, aggregation packets, and fragmentation packets. A receiver can identify
+the payload structure by the Packet Type field of the payload header. The Packet
+Type field indicates whether the packet is a single unit packet, an aggregation
+packet, or the first, a middle, or the last fragmentation packet of a fragmented
+DU. The Packet Type field <span class="bcp14">MUST</span> be set according to <a href="#_table-type-field" class="auto internal xref">Table 2</a>.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<span id="name-packet-type-field-values"></span><div id="_table-type-field">
 <table class="center" id="table-2">
           <caption>
 <a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-type-field-values" class="selfRef">Type field values</a>
+<a href="#name-packet-type-field-values" class="selfRef">Packet Type field values</a>
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Packet Type</th>
               <th class="text-left" rowspan="1" colspan="1">Description</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">000</td>
-              <td class="text-left" rowspan="1" colspan="1">Single Unit Packet <a href="#single-unit" class="auto internal xref">Section 4.4.1</a>
+              <td class="text-left" rowspan="1" colspan="1">Single unit packet <a href="#single-unit-packet" class="auto internal xref">Section 4.4.1</a>
 </td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">001</td>
-              <td class="text-left" rowspan="1" colspan="1">Aggregation Unit Packet <a href="#aggregation-packet" class="auto internal xref">Section 4.4.2</a>
+              <td class="text-left" rowspan="1" colspan="1">Aggregation packet <a href="#aggregation-packet" class="auto internal xref">Section 4.4.2</a>
 </td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">010</td>
-              <td class="text-left" rowspan="1" colspan="1">First packet of an fragmentation unit packet <a href="#fragmentation-unit" class="auto internal xref">Section 4.4.3</a>
+              <td class="text-left" rowspan="1" colspan="1">First fragmentation packet <a href="#fragmentation-packet" class="auto internal xref">Section 4.4.3</a>
 </td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">011</td>
-              <td class="text-left" rowspan="1" colspan="1">Fragmentation unit packet <a href="#fragmentation-unit" class="auto internal xref">Section 4.4.3</a>
+              <td class="text-left" rowspan="1" colspan="1">Middle fragmentation packet <a href="#fragmentation-packet" class="auto internal xref">Section 4.4.3</a>
 </td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">100</td>
-              <td class="text-left" rowspan="1" colspan="1">Last packet of an fragmentation unit packet <a href="#fragmentation-unit" class="auto internal xref">Section 4.4.3</a>
+              <td class="text-left" rowspan="1" colspan="1">Last fragmentation packet <a href="#fragmentation-packet" class="auto internal xref">Section 4.4.3</a>
 </td>
             </tr>
             <tr>
@@ -1779,17 +1797,18 @@ packet. The type field <span class="bcp14">MUST</span> be set according to <a hr
 </div>
 <p id="section-4.4-3">The following sections explain the details and variations from this format for
 the three packet types.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
-<div id="single-unit">
+<div id="single-unit-packet">
 <section id="section-4.4.1">
-          <h4 id="name-single-unit">
-<a href="#section-4.4.1" class="section-number selfRef">4.4.1. </a><a href="#name-single-unit" class="section-name selfRef">Single Unit</a>
+          <h4 id="name-single-unit-packet">
+<a href="#section-4.4.1" class="section-number selfRef">4.4.1. </a><a href="#name-single-unit-packet" class="section-name selfRef">Single Unit Packet</a>
           </h4>
-<p id="section-4.4.1-1">A Single Unit packet contains only one data unit. The first byte in the packet
+<p id="section-4.4.1-1">A single unit packet contains only one data unit. The first byte in the packet
 is the payload header, followed by the payload data. The data unit extends until
-the end of the packet. The packet type field of a single unit packet <span class="bcp14">MUST</span> be set
-to zero (binary <code>000</code>).<a href="#section-4.4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.4.1-2"><a href="#fig-single-unit-payload" class="auto internal xref">Figure 3</a> shows an example of a single unit packet.<a href="#section-4.4.1-2" class="pilcrow">¶</a></p>
-<span id="name-single-unit-packet-payload"></span><div id="fig-single-unit-payload">
+the end of the packet, excluding any RTP padding. The DU is carried without its
+TLV header. The Packet Type field of a single unit packet <span class="bcp14">MUST</span> be set to zero
+(binary <code>000</code>).<a href="#section-4.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.4.1-2"><a href="#fig-single-unit-packet" class="auto internal xref">Figure 3</a> shows an example of a single unit packet.<a href="#section-4.4.1-2" class="pilcrow">¶</a></p>
+<span id="name-single-unit-packet-payload"></span><div id="fig-single-unit-packet">
 <figure id="figure-3">
             <div class="alignLeft art-text artwork" id="section-4.4.1-3.1">
 <pre>
@@ -1818,42 +1837,47 @@ to zero (binary <code>000</code>).<a href="#section-4.4.1-1" class="pilcrow">¶<
           </h4>
 <p id="section-4.4.2-1">An aggregation packet contains two or more DUs. Aggregation packets can reduce
 packetization and header overhead for small DUs such as parameter sets. Each DU
-is prefixed with a separate payload header and an additional length field. The
-length field is 16-bit unsigned integer indicating the length of the following
-DU in bytes.<a href="#section-4.4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.4.2-2">An aggregation packet <span class="bcp14">MUST</span> carry at least two DUs. Aggregation
-packets <span class="bcp14">MAY</span> carry more than two DUs. The total amount of data in
-an aggregation packet <span class="bcp14">MUST</span> fit into an IP packet, and the size <span class="bcp14">SHOULD</span> be chosen
-so that the resulting IP packet is smaller than the MTU size in order to avoid
-IP layer fragmentation. An aggregation packet <span class="bcp14">MUST NOT</span> contain any fragmentation
-units.<a href="#section-4.4.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.4.2-3">An aggregation packet <span class="bcp14">MUST NOT</span> carry DUs of different point cloud
-frames, i.e., all DUs included in an aggregation packet <span class="bcp14">MUST</span> have
-the same timestamp.<a href="#section-4.4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.4.2-4">The packet type field of every DU in an aggregation packet <span class="bcp14">MUST</span> be
+is prefixed with a separate payload header and a Size field, forming an
+aggregation unit. The Size field is a 16-bit unsigned integer in network byte
+order indicating the length of the following DU in bytes, excluding the payload
+header and the Size field. DUs are carried without their TLV header. There is no
+padding between the DUs of an aggregation packet, i.e., the payload header of a
+DU directly follows the last byte of the preceding DU.<a href="#section-4.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.4.2-2">An aggregation packet <span class="bcp14">MUST</span> carry at least two DUs. Aggregation packets <span class="bcp14">MAY</span> carry
+more than two DUs. The total amount of data in an aggregation packet <span class="bcp14">MUST</span> fit
+into an IP packet, and the size <span class="bcp14">SHOULD</span> be chosen so that the resulting IP packet
+is smaller than the MTU size in order to avoid IP layer fragmentation. An
+aggregation packet <span class="bcp14">MUST NOT</span> contain fragments of DUs.<a href="#section-4.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.4.2-3">An aggregation packet <span class="bcp14">MUST NOT</span> carry DUs of different point cloud frames.<a href="#section-4.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.4.2-4">The Packet Type field of every aggregation unit in an aggregation packet <span class="bcp14">MUST</span> be
 set to the value one (binary <code>001</code>).<a href="#section-4.4.2-4" class="pilcrow">¶</a></p>
-<p id="section-4.4.2-5"><a href="#fig-aggregation-header" class="auto internal xref">Figure 4</a> shows the extended payload header format of syntax
-structures in aggregation packets.<a href="#section-4.4.2-5" class="pilcrow">¶</a></p>
-<span id="name-aggregation-unit-payload"></span><div id="fig-aggregation-header">
+<p id="section-4.4.2-5">A receiver parses the DUs of an aggregation packet in order, after removing any
+RTP padding. If a payload header with a Packet Type field other than <code>001</code> is
+found, if the Size field of a DU indicates more bytes than remain in the packet,
+or if bytes remain after the last DU that do not form a complete payload header,
+Size field, and DU, the receiver <span class="bcp14">MUST</span> discard the remainder of the packet,
+starting with the affected DU. DUs preceding it in the packet are not affected.<a href="#section-4.4.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.4.2-6"><a href="#fig-aggregation-header" class="auto internal xref">Figure 4</a> shows the format of an aggregation unit.<a href="#section-4.4.2-6" class="pilcrow">¶</a></p>
+<span id="name-aggregation-unit-format"></span><div id="fig-aggregation-header">
 <figure id="figure-4">
-            <div class="alignLeft art-text artwork" id="section-4.4.2-6.1">
+            <div class="alignLeft art-text artwork" id="section-4.4.2-7.1">
 <pre>
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|Typ=1|Unit-Type|            Size               |   Data Unit  ...
+|PType|Unit Type|            Size               |   Data Unit  ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
-<a href="#name-aggregation-unit-payload" class="selfRef">Aggregation Unit Payload</a>
+<a href="#name-aggregation-unit-format" class="selfRef">Aggregation unit format</a>
             </figcaption></figure>
 </div>
-<p id="section-4.4.2-7">An example of an aggregation unit packet with two data unit payloads is shown in
-<a href="#fig-aggregation-format" class="auto internal xref">Figure 5</a>.<a href="#section-4.4.2-7" class="pilcrow">¶</a></p>
-<span id="name-packet-payload"></span><div id="fig-aggregation-format">
+<p id="section-4.4.2-8">An example of an aggregation packet with two aggregation units is shown in
+<a href="#fig-aggregation-format" class="auto internal xref">Figure 5</a>.<a href="#section-4.4.2-8" class="pilcrow">¶</a></p>
+<span id="name-aggregation-packet-payload-"></span><div id="fig-aggregation-format">
 <figure id="figure-5">
-            <div class="alignLeft art-text artwork" id="section-4.4.2-8.1">
+            <div class="alignLeft art-text artwork" id="section-4.4.2-9.1">
 <pre>
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1862,10 +1886,11 @@ structures in aggregation packets.<a href="#section-4.4.2-5" class="pilcrow">¶<
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
 |                                                               |
 |                           Data Unit                           |
-|                                                               |
+|                                               +-+-+-+-+-+-+-+-+
+|                                               | PayloadHeader |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| PayloadHeader |           Size                |               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               +
+|             Size              |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
 |                                                               |
 |                           Data Unit                           |
 |                                                               |
@@ -1875,31 +1900,88 @@ structures in aggregation packets.<a href="#section-4.4.2-5" class="pilcrow">¶<
 </pre>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
-<a href="#name-packet-payload" class="selfRef">Packet Payload</a>
+<a href="#name-aggregation-packet-payload-" class="selfRef">Aggregation packet payload with two aggregation units</a>
             </figcaption></figure>
 </div>
 </section>
 </div>
-<div id="fragmentation-unit">
+<div id="fragmentation-packet">
 <section id="section-4.4.3">
-          <h4 id="name-fragmentation-unit">
-<a href="#section-4.4.3" class="section-number selfRef">4.4.3. </a><a href="#name-fragmentation-unit" class="section-name selfRef">Fragmentation Unit</a>
+          <h4 id="name-fragmentation-packet">
+<a href="#section-4.4.3" class="section-number selfRef">4.4.3. </a><a href="#name-fragmentation-packet" class="section-name selfRef">Fragmentation Packet</a>
           </h4>
-<p id="section-4.4.3-1">Fragmentation units allow fragmentation of single DUs into
-multiple RTP packets without cooperation from the G-PCC encoder. Fragments of
-the same DU <span class="bcp14">MUST</span> be sent in consecutive order with ascending RTP
-sequence numbers (with no other RTP packets within the same RTP stream being
-sent between the first and last fragment).<a href="#section-4.4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.4.3-2">Aggregation packets <span class="bcp14">MUST NOT</span> be fragmented. Fragmentation units <span class="bcp14">MUST NOT</span> be
-nested, i.e., a fragmentation unit cannot contain a subset of another
-fragmentation unit.<a href="#section-4.4.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.4.3-3">The timestamp of all fragmentation units <span class="bcp14">MUST</span> be set to the same value: the
-timestamp of the DU that is carried in the fragmentation unit
-packets.<a href="#section-4.4.3-3" class="pilcrow">¶</a></p>
-<p id="section-4.4.3-4">The type field of the first packet of a series of fragmentation units <span class="bcp14">MUST</span> be
-set to 2 (binary <code>010</code>), the type field of the last packet in the series <span class="bcp14">MUST</span> be
-set to four (binary <code>100</code>), and the type field of all packets between the first
-and last packet of the fragmented unit <span class="bcp14">MUST</span> have the value three (binary <code>011</code>).<a href="#section-4.4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.4.3-1">Fragmentation packets allow a single DU to be split into multiple RTP packets
+without cooperation from the G-PCC encoder. A DU that does not fit into a single
+RTP packet without exceeding the path MTU <span class="bcp14">SHOULD</span> be fragmented. Fragments of the
+same DU <span class="bcp14">MUST</span> be sent in consecutive order with ascending RTP sequence numbers
+(with no other RTP packets within the same RTP stream being sent between the
+first and last fragment).<a href="#section-4.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.4.3-2">Aggregation packets <span class="bcp14">MUST NOT</span> be fragmented. Fragmentation packets <span class="bcp14">MUST NOT</span> be
+nested, i.e., a fragmentation packet cannot contain a fragment of another
+fragmentation packet.<a href="#section-4.4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.4.3-3">A fragmentation packet consists of the payload header followed by a fragment of
+the DU. The fragment extends until the end of the packet, excluding any RTP
+padding. It is a sequence of consecutive bytes of the DU, without the TLV
+header. The DU is the concatenation of the fragments of all fragmentation
+packets of the series, in RTP sequence number order.
+<a href="#fig-fragmentation-packet" class="auto internal xref">Figure 6</a> shows the format of a fragmentation packet.<a href="#section-4.4.3-3" class="pilcrow">¶</a></p>
+<span id="name-fragmentation-packet-payloa"></span><div id="fig-fragmentation-packet">
+<figure id="figure-6">
+            <div class="alignLeft art-text artwork" id="section-4.4.3-4.1">
+<pre>
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| PayloadHeader |                                               |
++-+-+-+-+-+-+-+-+                                               |
+|                         DU Fragment                           |
+|                                                               |
+|                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                               :...OPTIONAL RTP padding        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre>
+</div>
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<a href="#name-fragmentation-packet-payloa" class="selfRef">Fragmentation packet payload</a>
+            </figcaption></figure>
+</div>
+<p id="section-4.4.3-5">The Packet Type field of the first fragmentation packet of a fragmented DU <span class="bcp14">MUST</span>
+be set to two (binary <code>010</code>), the Packet Type field of the last fragmentation
+packet <span class="bcp14">MUST</span> be set to four (binary <code>100</code>), and the Packet Type field of all
+fragmentation packets between the first and the last <span class="bcp14">MUST</span> be set to three
+(binary <code>011</code>).<a href="#section-4.4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.4.3-6">The Unit Type field of every fragmentation packet <span class="bcp14">MUST</span> be set to the type of the
+fragmented DU.<a href="#section-4.4.3-6" class="pilcrow">¶</a></p>
+<p id="section-4.4.3-7">A fragmented DU <span class="bcp14">MUST</span> be carried in at least two fragmentation packets, i.e., a
+DU <span class="bcp14">MUST NOT</span> be sent as a single fragmentation packet. Each fragmentation packet
+<span class="bcp14">MUST</span> carry a non-empty fragment.<a href="#section-4.4.3-7" class="pilcrow">¶</a></p>
+<p id="section-4.4.3-8">The RTP timestamp of all fragmentation packets of a fragmented DU <span class="bcp14">MUST</span> be set to
+the same value: the RTP timestamp of the point cloud frame to which the DU
+belongs, as defined in <a href="#rtp-header" class="auto internal xref">Section 4.2</a>.<a href="#section-4.4.3-8" class="pilcrow">¶</a></p>
+<p id="section-4.4.3-9">A receiver reassembles a DU from a series of fragmentation packets that starts
+with a first fragmentation packet (<code>010</code>), continues with zero or more middle
+fragmentation packets (<code>011</code>), and ends with a last fragmentation packet
+(<code>100</code>), all with consecutive RTP sequence numbers, the same RTP timestamp, and
+the same Unit Type. A receiver <span class="bcp14">MUST</span> treat the series as incomplete and <span class="bcp14">MUST</span>
+discard the fragments received so far if any of the following occurs:<a href="#section-4.4.3-9" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.4.3-10.1">
+              <p id="section-4.4.3-10.1.1">a gap in RTP sequence numbers between the first and the last fragmentation
+packet,<a href="#section-4.4.3-10.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4.4.3-10.2">
+              <p id="section-4.4.3-10.2.1">a middle or last fragmentation packet that is not preceded by a first
+fragmentation packet of the same series,<a href="#section-4.4.3-10.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4.4.3-10.3">
+              <p id="section-4.4.3-10.3.1">a first fragmentation packet, or a packet other than a fragmentation packet,
+before the last fragmentation packet of the series,<a href="#section-4.4.3-10.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4.4.3-10.4">
+              <p id="section-4.4.3-10.4.1">a change in RTP timestamp or Unit Type within the series.<a href="#section-4.4.3-10.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-4.4.3-11">A receiver <span class="bcp14">MUST NOT</span> pass incomplete DUs to the decoder.<a href="#section-4.4.3-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1911,30 +1993,69 @@ and last packet of the fragmented unit <span class="bcp14">MUST</span> have the 
       <h2 id="name-packetization-rules-and-dep">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-packetization-rules-and-dep" class="section-name selfRef">Packetization Rules and Depacketization Rules</a>
       </h2>
+<div id="packetization-rules">
+<section id="section-5.1">
+        <h3 id="name-packetization-rules">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-packetization-rules" class="section-name selfRef">Packetization Rules</a>
+        </h3>
 <ul class="normal">
-<li class="normal" id="section-5-1.1">
-          <p id="section-5-1.1.1">A DU of a small size <span class="bcp14">SHOULD</span> be encapsulated in an aggregation
+<li class="normal" id="section-5.1-1.1">
+            <p id="section-5.1-1.1.1">DUs <span class="bcp14">MUST</span> be transmitted in decoding order, i.e., in the order in which they
+appear in the G-PCC bitstream as defined in Annex B of <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>.
+The RTP sequence number of a packet carrying a DU <span class="bcp14">MUST</span> be higher (modulo
+2^16) than the RTP sequence number of any packet carrying a DU that precedes
+it in decoding order.<a href="#section-5.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.2">
+            <p id="section-5.1-1.2.1">Within an aggregation packet, DUs <span class="bcp14">MUST</span> appear in decoding order.<a href="#section-5.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.3">
+            <p id="section-5.1-1.3.1">A DU of a small size <span class="bcp14">SHOULD</span> be encapsulated in an aggregation
 packet together with one or more other DUs in order to avoid the
 unnecessary packetization overhead for small DUs. For example,
-parameter sets are typically small and can often be aggregated with without
-violating MTU size constraints.<a href="#section-5-1.1.1" class="pilcrow">¶</a></p>
+parameter sets are typically small and can often be aggregated without
+violating MTU size constraints.<a href="#section-5.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-5-1.2">
-          <p id="section-5-1.2.1">For carrying exactly one DU in an RTP packet, a single unit
-packet <span class="bcp14">MUST</span> be used.<a href="#section-5-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-5.1-1.4">
+            <p id="section-5.1-1.4.1">For carrying exactly one DU in an RTP packet, a single unit
+packet <span class="bcp14">MUST</span> be used.<a href="#section-5.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
-      </ul>
-<p id="section-5-2">The de-packetization process is implementation dependent. Therefore, the
-following de-packetization rules <span class="bcp14">SHOULD</span> be taken as an example.<a href="#section-5-2" class="pilcrow">¶</a></p>
+        </ul>
+</section>
+</div>
+<div id="depacketization-rules">
+<section id="section-5.2">
+        <h3 id="name-depacketization-rules">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-depacketization-rules" class="section-name selfRef">Depacketization Rules</a>
+        </h3>
+<p id="section-5.2-1">A receiver <span class="bcp14">MUST</span> pass DUs to the decoder in RTP sequence number order. Within an
+aggregation packet, DUs <span class="bcp14">MUST</span> be passed to the decoder in the order in which they
+appear in the packet. To do so, a receiver performs the following steps:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5-3.1">
-          <p id="section-5-3.1.1">All normal RTP mechanisms related to buffer management apply. In particular,
+<li class="normal" id="section-5.2-2.1">
+            <p id="section-5.2-2.1.1">All normal RTP mechanisms related to buffer management apply. In particular,
 duplicated or outdated RTP packets (as indicated by the RTP sequence number
-and the RTP timestamp) are removed. To determine the exact time for decoding,
-factors such as a possible intentional delay to allow for proper inter-stream
-synchronization must be factored in.<a href="#section-5-3.1.1" class="pilcrow">¶</a></p>
+and the RTP timestamp) are removed, and packets are reordered by RTP sequence
+number.<a href="#section-5.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-      </ul>
+          <li class="normal" id="section-5.2-2.2">
+            <p id="section-5.2-2.2.1">The DUs are extracted from each packet according to the Packet Type field
+(<a href="#payload-structures" class="auto internal xref">Section 4.4</a>). Fragments of a DU are reassembled as described in
+<a href="#fragmentation-packet" class="auto internal xref">Section 4.4.3</a>, which also defines the handling of incomplete DUs.<a href="#section-5.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-2.3">
+            <p id="section-5.2-2.3.1">Each DU is passed to the decoder as a TLV encapsulation structure as defined
+in Annex B of <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, with <code>tlv_type</code> set to the Unit Type of the
+payload header and <code>tlv_num_payload_bytes</code> set to the length of the DU in
+bytes.<a href="#section-5.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.2-3">To determine the exact time for decoding, factors such as a possible intentional
+delay to allow for proper inter-stream synchronization need to be factored in.
+How long a receiver waits for reordered or retransmitted packets before
+considering them lost is implementation dependent.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="payload-format-parameters">
@@ -1942,18 +2063,15 @@ synchronization must be factored in.<a href="#section-5-3.1.1" class="pilcrow">�
       <h2 id="name-payload-format-parameters">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-payload-format-parameters" class="section-name selfRef">Payload Format Parameters</a>
       </h2>
-<p id="section-6-1">This section defines the media type to use with the payload format and the
-optional parameters that can be used with it.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">This section defines the media type to use with the payload format and its
+parameters.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <div id="media-type">
 <section id="section-6.1">
         <h3 id="name-media-type-definition">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-media-type-definition" class="section-name selfRef">Media Type Definition</a>
         </h3>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.1-1.1">
-            <p id="section-6.1-1.1.1"><strong>Note</strong>: Template from <span><a href="https://rfc-editor.org/rfc/rfc4288#section-10" class="relref">Section 10</a> of [<a href="#RFC4288" class="cite xref">RFC4288</a>]</span><a href="#section-6.1-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<p id="section-6.1-1">This section describes the media type registration following <span>[<a href="#RFC6838" class="cite xref">RFC6838</a>]</span> and
+<span>[<a href="#RFC4855" class="cite xref">RFC4855</a>]</span>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlNewline" id="section-6.1-2">
           <dt id="section-6.1-2.1">
 <strong>Type name</strong>:</dt>
@@ -1964,25 +2082,25 @@ optional parameters that can be used with it.<a href="#section-6-1" class="pilcr
 <dt id="section-6.1-2.3">
 <strong>Subtype name</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.4">
-            <p id="section-6.1-2.4.1">GPCC<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.4.1">gpcc<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-2.5">
-<strong>Required Parameters</strong>:</dt>
+<strong>Required parameters</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.6">
-            <p id="section-6.1-2.6.1">None<a href="#section-6.1-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.6.1">profile-compatibility, level-idc. See <a href="#required-parameters-definition" class="auto internal xref">Section 6.2</a>.<a href="#section-6.1-2.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-2.7">
-<strong>Optional Parameters</strong>:</dt>
+<strong>Optional parameters</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.8">
-            <p id="section-6.1-2.8.1">profile-level-id <strong>TODO</strong>: add list from section <a href="#optional-parameters-definition" class="auto internal xref">Section 6.2</a><a href="#section-6.1-2.8.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.8.1">N/A<a href="#section-6.1-2.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-2.9">
 <strong>Encoding considerations</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.10">
-            <p id="section-6.1-2.10.1">This type is only defined for transfer via RTP <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span>.<a href="#section-6.1-2.10.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.10.1">This media type is framed and contains binary data (see <span><a href="https://rfc-editor.org/rfc/rfc6838#section-4.8" class="relref">Section 4.8</a> of [<a href="#RFC6838" class="cite xref">RFC6838</a>]</span>).<a href="#section-6.1-2.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-2.11">
@@ -2000,14 +2118,14 @@ optional parameters that can be used with it.<a href="#section-6-1" class="pilcr
 <dt id="section-6.1-2.15">
 <strong>Published specification</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.16">
-            <p id="section-6.1-2.16.1">Please refer to &lt;<strong>TODO</strong>: Reference this document&gt; and
-  <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>.<a href="#section-6.1-2.16.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.16.1">RFC XXXX and <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>.<a href="#section-6.1-2.16.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-2.17">
 <strong>Applications that use this media type</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.18">
-            <p id="section-6.1-2.18.1">Any application that relies on GPCC-based point cloud transmission over RTP<a href="#section-6.1-2.18.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.18.1">Any application that relies on G-PCC-based point cloud transmission over
+  RTP.<a href="#section-6.1-2.18.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-2.19">
@@ -2037,115 +2155,72 @@ optional parameters that can be used with it.<a href="#section-6-1" class="pilcr
 <dt id="section-6.1-2.27">
 <strong>Restrictions on usage</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.28">
-            <p id="section-6.1-2.28.1">N/A<a href="#section-6.1-2.28.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.28.1">This media type depends on RTP framing and is only defined for transfer via
+  RTP <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span>. Transfer within other framing protocols is not defined.<a href="#section-6.1-2.28.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-2.29">
 <strong>Author</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.30">
-            <p id="section-6.1-2.30.1">See Authors' Addresses section of &lt;<strong>TODO</strong>: Reference this document&gt;<a href="#section-6.1-2.30.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.30.1">See the Authors' Addresses section of RFC XXXX.<a href="#section-6.1-2.30.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-2.31">
 <strong>Change controller</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-2.32">
-            <p id="section-6.1-2.32.1">IETF <a href="mailto:avtcore@ietf.org">avtcore@ietf.org</a><a href="#section-6.1-2.32.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.32.1">IETF <a href="mailto:avt@ietf.org">avt@ietf.org</a><a href="#section-6.1-2.32.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.33">
+<strong>Provisional registration? (standards tree only)</strong>:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.34">
+            <p id="section-6.1-2.34.1">No<a href="#section-6.1-2.34.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
 </section>
 </div>
-<div id="optional-parameters-definition">
+<div id="required-parameters-definition">
 <section id="section-6.2">
-        <h3 id="name-optional-parameters-definit">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-optional-parameters-definit" class="section-name selfRef">Optional Parameters Definition</a>
+        <h3 id="name-required-parameters-definit">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-required-parameters-definit" class="section-name selfRef">Required Parameters Definition</a>
         </h3>
-<span class="break"></span><dl class="dlParallel" id="section-6.2-1">
+<span class="break"></span><dl class="dlNewline" id="section-6.2-1">
           <dt id="section-6.2-1.1">
-<strong>profile-level-id</strong>:</dt>
+<strong>profile-compatibility</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.2-1.2">
-            <p id="section-6.2-1.2.1">The profile-level-id is a base16 <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> (hexadecimal) representation
-  of one byte containing the flags indicating support or conformance to the
-  G-PCC profiles and levels. The first four bits are flags indicating support
-  for the profiles <em>Simple</em>, <em>Predictive</em>, <em>Dense</em> and <em>Main</em>, while the last
-  four bits indicate the highest level that the decoder supports or a bitstream
-  conforms to.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.2-1.2.1">A base16 <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> (hexadecimal) representation of three bytes, i.e.,
+  exactly six hexadecimal digits. The value is case-insensitive. The first 22
+  bits, most significant bit first, are, in this order,
+  <code>simple_profile_compliant</code>, <code>dense_profile_compliant</code>,
+  <code>predictive_profile_compliant</code>, <code>main_profile_compliant</code>, and
+  <code>reserved_profile_18bits</code> as defined in the sequence parameter set of
+  <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Section 7.3.2.1. The bits corresponding to
+  <code>reserved_profile_18bits</code> <span class="bcp14">MUST</span> be set to 0 and <span class="bcp14">MUST</span> be ignored by receivers.
+  The last two bits <span class="bcp14">MUST</span> be set to 0 and <span class="bcp14">MUST</span> be ignored by receivers. They do
+  not correspond to the <code>slice_reordering_constraint</code> and
+  <code>unique_point_positions_constraint</code> flags at the same positions in the SPS.
+  When used to describe a bitstream, the bits are set to the values of the
+  corresponding syntax elements in the SPS of the bitstream. When used to
+  describe receiver capabilities, a bit set to 1 indicates that the receiver
+  supports the corresponding profile. For example, <code>800000</code> indicates the Simple
+  profile, and <code>100000</code> indicates the Main profile.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.2-1.3">
-<strong>pcc-resolution</strong>:</dt>
+<strong>level-idc</strong>:</dt>
           <dd style="margin-left: 1.5em" id="section-6.2-1.4">
-            <p id="section-6.2-1.4.1">Describes the resolution of the point cloud as number of lines, number of
-points per line and depth resolution.<a href="#section-6.2-1.4.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.2-2.1">
-            <p id="section-6.2-2.1.1">&lt;#lines&gt; &lt;#points-per-line&gt; &lt;#depth-resolution&gt;<a href="#section-6.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span class="break"></span><dl class="dlParallel" id="section-6.2-3">
-          <dt id="section-6.2-3.1">
-<strong>pcc-coverage</strong>:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-3.2">
-            <p id="section-6.2-3.2.1">The field of view coverage of the sensor described by the horizontal and
-vertical angles.<a href="#section-6.2-3.2.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.2-4.1">
-            <p id="section-6.2-4.1.1">&lt;h-angle&gt; &lt;v-angle&gt;<a href="#section-6.2-4.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span class="break"></span><dl class="dlParallel" id="section-6.2-5">
-          <dt id="section-6.2-5.1">
-<strong>pcc-anchor</strong>:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-5.2">
-            <p id="section-6.2-5.2.1">An anchor reference point for the point cloud, relative to which coordinates
-are given. This can be useful to relate multiple point clouds to each other.<a href="#section-6.2-5.2.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.2-6.1">
-            <p id="section-6.2-6.1.1">&lt;x&gt; &lt;y&gt; &lt;z&gt;<a href="#section-6.2-6.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span class="break"></span><dl class="dlParallel" id="section-6.2-7">
-          <dt id="section-6.2-7.1">
-<strong>pcc-orientation</strong>:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-7.2">
-            <p id="section-6.2-7.2.1">The orientation of the point cloud sensor.<a href="#section-6.2-7.2.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.2-8.1">
-            <p id="section-6.2-8.1.1">&lt;tilt&gt; &lt;pan&gt;<a href="#section-6.2-8.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span class="break"></span><dl class="dlParallel" id="section-6.2-9">
-          <dt id="section-6.2-9.1">
-<strong>pcc-position</strong>:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-9.2">
-            <p id="section-6.2-9.2.1">The location of the LiDAR or point cloud sensor relative to <em>pcc-anchor</em> and
-<em>pcc-orientation</em>:<a href="#section-6.2-9.2.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.2-10.1">
-            <p id="section-6.2-10.1.1">&lt;delta-x&gt; &lt;delta-y&gt; &lt;delta-z&gt; &lt;delta-tilt&gt; &lt;delta-pan&gt;<a href="#section-6.2-10.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span class="break"></span><dl class="dlParallel" id="section-6.2-11">
-          <dt id="section-6.2-11.1">
-<strong>pcc-point-attr</strong>:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-11.2">
-            <p id="section-6.2-11.2.1">A list of attributes associated with each point. Example: color,
-reflectivity.<a href="#section-6.2-11.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.2-1.4.1">A decimal representation of the <code>level_idc</code> syntax element of the SPS as
+  defined in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Section 7.3.2.1, i.e., 20 times the level
+  number (e.g., <code>80</code> for level 4). The value is in the range 0 to 255. Only
+  values corresponding to levels defined in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Section A.4.1
+  (currently <code>80</code> and <code>120</code>) are valid. When used to describe a bitstream, it is
+  the level to which the bitstream conforms. When used to describe receiver
+  capabilities, it is the highest level that the receiver supports for all
+  profiles indicated in profile-compatibility. Levels are compared by their
+  <code>level_idc</code> value as specified in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Section A.4.1. A
+  receiver that supports different levels for different profiles can offer
+  multiple payload types, each with a single level.<a href="#section-6.2-1.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -2161,60 +2236,68 @@ reflectivity.<a href="#section-6.2-11.2.1" class="pilcrow">¶</a></p>
           <h4 id="name-mapping-of-payload-type-par">
 <a href="#section-6.3.1" class="section-number selfRef">6.3.1. </a><a href="#name-mapping-of-payload-type-par" class="section-name selfRef">Mapping of Payload Type Parameters to SDP</a>
           </h4>
-<p id="section-6.3.1-1">The media type application/GPCC string is mapped to fields in the Session
+<p id="section-6.3.1-1">The media type application/gpcc string is mapped to fields in the Session
 Description Protocol (SDP) <span>[<a href="#RFC8866" class="cite xref">RFC8866</a>]</span> as follows:<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.3.1-2.1">
-              <p id="section-6.3.1-2.1.1"><strong>TODO</strong>: Add all parameters from above<a href="#section-6.3.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
 <ul class="normal">
-<li class="normal" id="section-6.3.1-3.1">
-              <p id="section-6.3.1-3.1.1">The media name in the "m=" line of SDP <span class="bcp14">MUST</span> be application.<a href="#section-6.3.1-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3.1-2.1">
+              <p id="section-6.3.1-2.1.1">The media name in the "m=" line of SDP <span class="bcp14">MUST</span> be application.<a href="#section-6.3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.3.1-3.2">
-              <p id="section-6.3.1-3.2.1">The encoding name in the "a=rtpmap" line of SDP <span class="bcp14">MUST</span> be GPCC (the media
-subtype).<a href="#section-6.3.1-3.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.3.1-2.2">
+              <p id="section-6.3.1-2.2.1">The encoding name in the "a=rtpmap" line of SDP <span class="bcp14">MUST</span> be gpcc (the media
+subtype).<a href="#section-6.3.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.3.1-3.3">
-              <p id="section-6.3.1-3.3.1">The clock rate in the "a=rtpmap" line <span class="bcp14">MUST</span> be 90000.<a href="#section-6.3.1-3.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.3.1-2.3">
+              <p id="section-6.3.1-2.3.1">The clock rate in the "a=rtpmap" line <span class="bcp14">MUST</span> be 90000.<a href="#section-6.3.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.3.1-3.4">
-              <p id="section-6.3.1-3.4.1">The optional parameters <em>profile-level-id</em>, ... when present, <span class="bcp14">MUST</span> be included
-in the "a=fmtp" line of SDP. The fmtp line is expressed as a media type
-string, in the form of a semicolon-separated list of parameter=value pairs.<a href="#section-6.3.1-3.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.3.1-2.4">
+              <p id="section-6.3.1-2.4.1">The parameters <em>profile-compatibility</em> and <em>level-idc</em> <span class="bcp14">MUST</span> be included in the
+"a=fmtp" line of SDP. The fmtp line is expressed as a media type string, in
+the form of a semicolon-separated list of parameter=value pairs.<a href="#section-6.3.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
 </div>
-<div id="example">
+<div id="examples">
 <section id="section-6.3.2">
-          <h4 id="name-example">
-<a href="#section-6.3.2" class="section-number selfRef">6.3.2. </a><a href="#name-example" class="section-name selfRef">Example</a>
+          <h4 id="name-examples">
+<a href="#section-6.3.2" class="section-number selfRef">6.3.2. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
           </h4>
-<div class="alignLeft art-text artwork" id="section-6.3.2-1">
+<p id="section-6.3.2-1">The following example shows the media description of an offer to send a stream
+conforming to the Simple profile at level 4:<a href="#section-6.3.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.3.2-2">
 <pre>
-m=application 54321 RTP/AVPF 95
-a=rtpmap:95 GPCC/90000
-a=fmtp:95 profile-level-id=84; // 0x84 =&gt; 0b10000100 =&gt; simple profile, level 4
-          --
-          -- point cloud resolution
-          pcc-resolution: #lines #points-per-line #depth-resolution;
-          --
-          -- field of view
-          pcc-coverage: h-angle v-angle;
-          --
-          -- optional anchor point
-          pcc-anchor: &lt;type&gt; &lt;type-specific format&gt; "mm" x y z | "gps" lat lon alt;
-          pcc-orientation: tilt pan;
-          --
-          -- where is this lidar located (relative to possible others)
-          pcc-position: delta-x, delta-y, delta-z delta-tilt delta-pan;
-          --
-          -- which attributes are encoded per point: list of properties | profile
-          pcc-point-attr: "attr" color, reflectance;
-</pre><a href="#section-6.3.2-1" class="pilcrow">¶</a>
+m=application 49170 RTP/AVP 96
+a=rtpmap:96 gpcc/90000
+a=fmtp:96 profile-compatibility=800000;level-idc=80
+a=sendonly
+</pre><a href="#section-6.3.2-2" class="pilcrow">¶</a>
 </div>
+<p id="section-6.3.2-3">In the following example, the offerer is able to receive bitstreams conforming
+to the Dense or Main profile up to level 6 on payload type 96, and bitstreams
+conforming to the Simple profile up to level 4 on payload type 97:<a href="#section-6.3.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.3.2-4">
+<pre>
+m=application 49170 RTP/AVP 96 97
+a=rtpmap:96 gpcc/90000
+a=fmtp:96 profile-compatibility=500000;level-idc=120
+a=rtpmap:97 gpcc/90000
+a=fmtp:97 profile-compatibility=800000;level-idc=80
+a=sendrecv
+</pre><a href="#section-6.3.2-4" class="pilcrow">¶</a>
+</div>
+<p id="section-6.3.2-5">The answerer is only able to receive bitstreams conforming to the Main profile
+up to level 4. It accepts payload type 96 and removes payload type 97:<a href="#section-6.3.2-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.3.2-6">
+<pre>
+m=application 49172 RTP/AVP 96
+a=rtpmap:96 gpcc/90000
+a=fmtp:96 profile-compatibility=100000;level-idc=80
+a=sendrecv
+</pre><a href="#section-6.3.2-6" class="pilcrow">¶</a>
+</div>
+<p id="section-6.3.2-7">The offerer sends a bitstream conforming to the Main profile at level 4 or
+lower. The answerer sends a bitstream conforming to the Dense or Main profile
+at level 6 or lower.<a href="#section-6.3.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="offeranswer-considerations">
@@ -2222,27 +2305,42 @@ a=fmtp:95 profile-level-id=84; // 0x84 =&gt; 0b10000100 =&gt; simple profile, le
           <h4 id="name-offer-answer-considerations">
 <a href="#section-6.3.3" class="section-number selfRef">6.3.3. </a><a href="#name-offer-answer-considerations" class="section-name selfRef">Offer/Answer Considerations</a>
           </h4>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.3.3-1.1">
-              <p id="section-6.3.3-1.1.1"><strong>TODO</strong>: Are theses rules correct for G-PCC and do we need considerations for
-other parameters?<a href="#section-6.3.3-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<p id="section-6.3.3-2">When the payload format is offered over RTP using SDP in an Offer/Answer model
-as described in <span>[<a href="#RFC3264" class="cite xref">RFC3264</a>]</span> for negotiation for unicast usage, the following
-limitations and rules apply:<a href="#section-6.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.3-1">When the payload format is offered over RTP using SDP in an Offer/Answer model
+as described in <span>[<a href="#RFC3264" class="cite xref">RFC3264</a>]</span>, the following rules apply to the parameters
+profile-compatibility and level-idc:<a href="#section-6.3.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3.3-3.1">
-              <p id="section-6.3.3-3.1.1">The parameter identifying a media format configuration for G-PCC is
-profile-levle-id. This media format configuration parameter <span class="bcp14">MUST</span> be used
-symmetrically; that is, the answerer <span class="bcp14">MUST</span> either maintain this configuration
-parameter or remove the media format (payload type) completely if it is not
-supported.<a href="#section-6.3.3-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3.3-2.1">
+              <p id="section-6.3.3-2.1.1">In an offer or answer for a stream with direction sendrecv or recvonly, the
+parameters declare the profiles and level that the offerer or answerer is able
+to receive. The values in the answer are independent of the values in the
+offer.<a href="#section-6.3.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.3.3-3.2">
-              <p id="section-6.3.3-3.2.1">The G-PCC stream sent by either the offerer or the answerer <span class="bcp14">MUST</span> be encoded
-with a profile and level, lesser or equal to the values of the level and
-profile declared in the SDP by the receiving agent.<a href="#section-6.3.3-3.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.3.3-2.2">
+              <p id="section-6.3.3-2.2.1">In an offer for a stream with direction sendonly, the parameters describe the
+bitstream that the offerer will send. An answerer that is able to receive the
+bitstream <span class="bcp14">MUST</span> use the same values in the answer. Otherwise, it <span class="bcp14">MUST</span> remove
+the payload type from the answer.<a href="#section-6.3.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.3.3-2.3">
+              <p id="section-6.3.3-2.3.1">In an answer for a stream with direction sendonly, the parameters describe the
+bitstream that the answerer will send. The values <span class="bcp14">MUST</span> fulfill the conditions
+below for the profiles and level declared in the offer. An answerer that is
+not able to send such a bitstream <span class="bcp14">MUST</span> remove the payload type from the
+answer.<a href="#section-6.3.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.3.3-2.4">
+              <p id="section-6.3.3-2.4.1">A bitstream sent to a receiver <span class="bcp14">MUST</span> indicate conformance to at least one of
+the profiles indicated by the receiver in profile-compatibility, and <span class="bcp14">MUST</span>
+conform to a level that is lower than or equal to the level indicated by the
+receiver in level-idc.<a href="#section-6.3.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.3.3-2.5">
+              <p id="section-6.3.3-2.5.1">An offerer or answerer that is not able to send a bitstream fulfilling these
+conditions <span class="bcp14">MUST NOT</span> send on the payload type.<a href="#section-6.3.3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.3.3-2.6">
+              <p id="section-6.3.3-2.6.1">For multicast streams, the answerer <span class="bcp14">MUST</span> use the values of the offer or remove
+the payload type, as all receivers receive the same bitstream.<a href="#section-6.3.3-2.6.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -2252,27 +2350,20 @@ profile declared in the SDP by the receiving agent.<a href="#section-6.3.3-3.2.1
           <h4 id="name-declarative-sdp-considerati">
 <a href="#section-6.3.4" class="section-number selfRef">6.3.4. </a><a href="#name-declarative-sdp-considerati" class="section-name selfRef">Declarative SDP Considerations</a>
           </h4>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.3.4-1.1">
-              <p id="section-6.3.4-1.1.1"><strong>TODO</strong>: Are theses rules correct for G-PCC and do we need considerations for
-other parameters?<a href="#section-6.3.4-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<p id="section-6.3.4-2">When G-PCC over RTP is offered with SDP in a declarative style, as in Real Time
+<p id="section-6.3.4-1">When G-PCC over RTP is offered with SDP in a declarative style, as in Real Time
 Streaming Protocol (RTSP) <span>[<a href="#RFC7826" class="cite xref">RFC7826</a>]</span> or Session Announcement Protocol (SAP)
-<span>[<a href="#RFC2974" class="cite xref">RFC2974</a>]</span>, the following considerations are necessary.<a href="#section-6.3.4-2" class="pilcrow">¶</a></p>
+<span>[<a href="#RFC2974" class="cite xref">RFC2974</a>]</span>, the following considerations are necessary.<a href="#section-6.3.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3.4-3.1">
-              <p id="section-6.3.4-3.1.1">All parameters capable of indicating both stream properties and receiver
-capabilities are used to indicate only stream properties. In this case, the
-parameters profile and level declare only the values used by the stream, not
-the capabilities for receiving streams.<a href="#section-6.3.4-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3.4-2.1">
+              <p id="section-6.3.4-2.1.1">The parameters profile-compatibility and level-idc describe the bitstream that
+is sent, not the capabilities for receiving streams.<a href="#section-6.3.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.3.4-3.2">
-              <p id="section-6.3.4-3.2.1">A receiver of the SDP is required to support all parameters and values of the
-parameters provided; otherwise, the receiver <span class="bcp14">MUST</span> reject (RTSP) or not
-participate in (SAP) the session. It falls on the creator of the session to
-use values that are expected to be supported by the receiving application.<a href="#section-6.3.4-3.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.3.4-2.2">
+              <p id="section-6.3.4-2.2.1">A receiver <span class="bcp14">MUST</span> reject (RTSP) or not participate in (SAP) the session if it
+does not support at least one of the indicated profiles at the indicated level
+or higher, or if it does not support any other parameter or value provided. It
+falls on the creator of the session to use values that are expected to be
+supported by the receiving application.<a href="#section-6.3.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -2287,20 +2378,66 @@ use values that are expected to be supported by the receiving application.<a hre
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
       </h2>
 <p id="section-7-1">Congestion control for RTP <span class="bcp14">SHALL</span> be used in accordance with <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span>, and
-with any applicable RTP profile: e.g., <span>[<a href="#RFC3551" class="cite xref">RFC3551</a>]</span>.  An additional requirement
-if best-effort service is being used is users of this payload format <span class="bcp14">MUST</span>
-monitor packet loss to ensure that the packet loss rate is within acceptable
-parameters. Circuit Breakers <span>[<a href="#RFC8083" class="cite xref">RFC8083</a>]</span> is an update to RTP <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span> that
-defines criteria for when one is required to stop sending RTP Packet Streams.
-The circuit breakers is to be implemented and followed.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">The bitrate can be dynamically adapted when real-time encoding is used. If the
-packet payload is not encrypted and intermediate network elements have access to
-the payload, they can select packets to drop based on the payload header.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">Attribute decoding depends on geometry decoding and ADUs can become obsolete,
-when the corresponding geometry data is dropped. Thus, intermediates <span class="bcp14">SHOULD</span>
-prefer dropping ADUs first. Similarly, fragmentation units can only be
-reconstructed if all fragments arrive. Thus, it is reasonable to drop either all
-or none of the packets that are part of the same fragmentation unit.<a href="#section-7-3" class="pilcrow">¶</a></p>
+with any applicable RTP profile: e.g., <span>[<a href="#RFC3551" class="cite xref">RFC3551</a>]</span>.  If best-effort service is
+being used, users of this payload format <span class="bcp14">MUST</span> monitor packet loss to ensure that
+the packet loss rate is within acceptable parameters. Circuit Breakers
+<span>[<a href="#RFC8083" class="cite xref">RFC8083</a>]</span> is an update to RTP <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span> that defines criteria for when one
+is required to stop sending RTP Packet Streams. RTP circuit breakers
+<span>[<a href="#RFC8083" class="cite xref">RFC8083</a>]</span> <span class="bcp14">MUST</span> be implemented and followed.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">Applications <span class="bcp14">SHOULD</span> also use a congestion control algorithm for interactive
+real-time media, such as <span>[<a href="#RFC8298" class="cite xref">RFC8298</a>]</span> or <span>[<a href="#RFC8698" class="cite xref">RFC8698</a>]</span>, which can use the RTCP
+feedback defined in <span>[<a href="#RFC8888" class="cite xref">RFC8888</a>]</span>.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">When real-time encoding is used, the sender can adapt the bitrate by changing
+the frame rate, the geometry precision (position quantization or octree depth),
+the attribute quantization parameters, the set of attributes sent, or the point
+density of the input.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">In addition, if the payload is not encrypted or the middlebox is part of the
+SRTP security context, a Selective Forwarding Middlebox (<span>[<a href="#RFC7667" class="cite xref">RFC7667</a>]</span>, Section
+3.7) can reduce the bitrate by dropping selected DUs. Some of the rules below
+require parsing the SPS and GDU header in addition to the payload header. The
+middlebox needs to rewrite sequence numbers, RTCP reports, aggregation packets,
+and the marker bit, so that dropped DUs do not appear as packet loss.<a href="#section-7-4" class="pilcrow">¶</a></p>
+<p id="section-7-5">Frames are coded independently (<span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Section 6.4.4), so a
+middlebox can drop all DUs of a frame except parameter sets and tile
+inventories. When dropping only some DUs of a frame, the following dependencies
+apply (<span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>):<a href="#section-7-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7-6.1">
+          <p id="section-7-6.1.1">Parameter sets are needed to decode all DUs that reference them. Middleboxes
+<span class="bcp14">SHOULD NOT</span> drop them.<a href="#section-7-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-6.2">
+          <p id="section-7-6.2.1">A tile inventory applies to all following frames until it is replaced by
+another tile inventory (Section 7.4.2.4). Middleboxes <span class="bcp14">SHOULD NOT</span> drop it.<a href="#section-7-6.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-6.3">
+          <p id="section-7-6.3.1">Frame-specific attribute properties DUs override attribute properties of the
+SPS, such as scale and offset, for a single frame. Without them, decoded
+attribute values of the frame can be misinterpreted. Middleboxes <span class="bcp14">SHOULD NOT</span>
+drop them.<a href="#section-7-6.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-6.4">
+          <p id="section-7-6.4.1">ADUs of a slice cannot be decoded without a GDU of the slice. If all GDUs of a
+slice are dropped, its ADUs <span class="bcp14">SHOULD</span> be dropped as well.<a href="#section-7-6.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-6.5">
+          <p id="section-7-6.5.1">Without its ADUs, the geometry of a slice remains decodable with default
+attribute values (Section 8.3.4), but the bitstream no longer conforms
+(Section 6.4.5) unless the ADUs are replaced by defaulted attribute DUs.<a href="#section-7-6.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-6.6">
+          <p id="section-7-6.6.1">When <code>slice_reordering_constraint</code> in the SPS is 1, removing slices can make
+following slices undecodable (Sections 7.4.2.1.1 and 7.4.3.2). Middleboxes
+<span class="bcp14">SHOULD NOT</span> drop slices of such bitstreams. In addition, when
+<code>entropy_continuation_enabled</code> in the SPS is 1, parsing of a GDU or ADU can
+depend on DUs of preceding slices (Section 11.6). Middleboxes <span class="bcp14">SHOULD NOT</span> drop
+GDUs or ADUs of such bitstreams. <code>entropy_continuation_enabled</code> can only be 1
+when <code>slice_reordering_constraint</code> is 1 (Section 7.4.2.1.1).<a href="#section-7-6.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-6.7">
+          <p id="section-7-6.7.1">Middleboxes <span class="bcp14">SHOULD</span> drop either all or none of the fragments of a DU.<a href="#section-7-6.7.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 </section>
 </div>
 <div id="iana-considerations">
@@ -2308,15 +2445,9 @@ or none of the packets that are part of the same fragmentation unit.<a href="#se
       <h2 id="name-iana-considerations">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-8-1.1">
-          <p id="section-8-1.1.1"><strong>TODO</strong>: Check if more registrations are necessary.<a href="#section-8-1.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="section-8-2">This memo requests that IANA registers a new media type as specified in
-<a href="#media-type" class="auto internal xref">Section 6.1</a>. The media type is also requested to be added to the IANA
-registry for "RTP Payload Format MIME types"
-<a href="http://www.iana.org/assignments/rtp-parameters">http://www.iana.org/assignments/rtp-parameters</a>.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-1">IANA is requested to register the media type application/gpcc, as specified in
+<a href="#media-type" class="auto internal xref">Section 6.1</a>, in the "Media Types" registry
+<a href="https://www.iana.org/assignments/media-types">https://www.iana.org/assignments/media-types</a>.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
@@ -2326,23 +2457,41 @@ registry for "RTP Payload Format MIME types"
       </h2>
 <p id="section-9-1">RTP packets using the payload format defined in this specification are subject
 to the security considerations discussed in the RTP specification <span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span>,
-and in any applicable RTP profile such as RTP/AVP <span>[<a href="#RFC3551" class="cite xref">RFC3551</a>]</span>, RTP/AVPF <span>[<a href="#RFC4585" class="cite xref">RFC4585</a>]</span>,
-RTP/SAVP <span>[<a href="#RFC3711" class="cite xref">RFC3711</a>]</span>, or RTP/ SAVPF <span>[<a href="#RFC5124" class="cite xref">RFC5124</a>]</span>.  However, as "Securing the RTP
-Protocol Framework: Why RTP Does Not Mandate a Single Media Security Solution"
-<span>[<a href="#RFC7202" class="cite xref">RFC7202</a>]</span> discusses, it is not an RTP payload format's responsibility to discuss
-or mandate what solutions are used to meet the basic security goals like
-confidentiality, integrity, and source authenticity for RTP in general.  This
-responsibility lays on anyone using RTP in an application.  They can find
-guidance on available security mechanisms and important considerations in
-"Options for Securing RTP Sessions" <span>[<a href="#RFC7201" class="cite xref">RFC7201</a>]</span>.  Applications <span class="bcp14">SHOULD</span> use one or
-more appropriate strong security mechanisms.  The rest of this Security
-Considerations section discusses the security impacting properties of the
-payload format itself.<a href="#section-9-1" class="pilcrow">¶</a></p>
-<p id="section-9-2">This RTP payload format and its media decoder do not exhibit any significant
-non-uniformity in the receiver-side computational complexity for packet
-processing, and thus are unlikely to pose a denial-of-service threat due to the
-receipt of pathological data. Nor does the RTP payload format contain any active
-content.<a href="#section-9-2" class="pilcrow">¶</a></p>
+and in any applicable RTP profile such as RTP/AVP <span>[<a href="#RFC3551" class="cite xref">RFC3551</a>]</span>, RTP/AVPF
+<span>[<a href="#RFC4585" class="cite xref">RFC4585</a>]</span>, RTP/SAVP <span>[<a href="#RFC3711" class="cite xref">RFC3711</a>]</span>, or RTP/SAVPF <span>[<a href="#RFC5124" class="cite xref">RFC5124</a>]</span>.  However, as
+"Securing the RTP Protocol Framework: Why RTP Does Not Mandate a Single Media
+Security Solution" <span>[<a href="#RFC7202" class="cite xref">RFC7202</a>]</span> discusses, it is not an RTP payload format's
+responsibility to discuss or mandate what solutions are used to meet the basic
+security goals like confidentiality, integrity, and source authenticity for RTP
+in general.  This responsibility lies on anyone using RTP in an application.
+They can find guidance on available security mechanisms and important
+considerations in "Options for Securing RTP Sessions" <span>[<a href="#RFC7201" class="cite xref">RFC7201</a>]</span>.
+Applications <span class="bcp14">SHOULD</span> use one or more appropriate strong security mechanisms.  The
+rest of this Security Considerations section discusses the security impacting
+properties of the payload format itself.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">The receiver-side computational complexity of G-PCC decoding is not uniform. A
+small amount of coded data can represent a large number of points. For example,
+the syntax elements <code>occ_dup_point_cnt</code>, <code>direct_dup_point_cnt</code>, and
+<code>ptn_dup_point_cnt</code> can each signal up to MaxSlicePoints - 1 points with
+identical positions (<span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Table A.9), where MaxSlicePoints is
+2^20 for all levels defined in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Table A.2. The level limits
+apply per slice and do not limit the number of slices or points per frame, the
+frame rate, or the bitrate. As stated in <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, Section 7.4.3.3,
+decoders cannot rely on bitstream conformance to prevent overflow of
+implementation buffers. Receivers <span class="bcp14">SHOULD</span> enforce local limits, e.g., on the
+number of points per slice and per frame, the number of slices per frame, and
+the size of DUs, and <span class="bcp14">SHOULD</span> discard data that exceeds them.<a href="#section-9-2" class="pilcrow">¶</a></p>
+<p id="section-9-3">The TLV encapsulation allows DUs of up to 2^32 - 1 bytes, and fragmented DUs are
+reassembled in receiver memory. Receivers <span class="bcp14">SHOULD</span> limit the size of DUs they
+reassemble and <span class="bcp14">SHOULD</span> discard incomplete DUs that are not completed within an
+implementation-specific time. Receivers <span class="bcp14">MUST</span> validate the Size field of each DU
+in an aggregation packet against the remaining length of the packet as described
+in <a href="#aggregation-packet" class="auto internal xref">Section 4.4.2</a>.<a href="#section-9-3" class="pilcrow">¶</a></p>
+<p id="section-9-4">This RTP payload format does not contain active content. User data DUs carry
+data not specified by <span>[<a href="#ISO.IEC.23090-9" class="cite xref">ISO.IEC.23090-9</a>]</span>, which receivers that interpret it
+<span class="bcp14">MUST</span> treat as untrusted input.<a href="#section-9-4" class="pilcrow">¶</a></p>
+<p id="section-9-5">Point clouds can capture people and private spaces. Applications <span class="bcp14">SHOULD</span> use
+confidentiality mechanisms appropriate for the captured content.<a href="#section-9-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rfc-editor-considerations">
@@ -2352,7 +2501,7 @@ content.<a href="#section-9-2" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-10-1">Note to RFC Editor: This section may be removed after carrying out all the
 instructions of this section.<a href="#section-10-1" class="pilcrow">¶</a></p>
-<p id="section-10-2">TODO: Consider<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-10-2">Please replace "RFC XXXX" with the RFC number of this document.<a href="#section-10-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -2382,29 +2531,17 @@ instructions of this section.<a href="#section-10-1" class="pilcrow">¶</a></p>
         <dd>
 <span class="refAuthor">Schulzrinne, H.</span>, <span class="refAuthor">Casner, S.</span>, <span class="refAuthor">Frederick, R.</span>, and <span class="refAuthor">V. Jacobson</span>, <span class="refTitle">"RTP: A Transport Protocol for Real-Time Applications"</span>, <span class="seriesInfo">STD 64</span>, <span class="seriesInfo">RFC 3550</span>, <span class="seriesInfo">DOI 10.17487/RFC3550</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3550">https://www.rfc-editor.org/rfc/rfc3550</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC3551">[RFC3551]</dt>
-        <dd>
-<span class="refAuthor">Schulzrinne, H.</span> and <span class="refAuthor">S. Casner</span>, <span class="refTitle">"RTP Profile for Audio and Video Conferences with Minimal Control"</span>, <span class="seriesInfo">STD 65</span>, <span class="seriesInfo">RFC 3551</span>, <span class="seriesInfo">DOI 10.17487/RFC3551</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3551">https://www.rfc-editor.org/rfc/rfc3551</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC3711">[RFC3711]</dt>
-        <dd>
-<span class="refAuthor">Baugher, M.</span>, <span class="refAuthor">McGrew, D.</span>, <span class="refAuthor">Naslund, M.</span>, <span class="refAuthor">Carrara, E.</span>, and <span class="refAuthor">K. Norrman</span>, <span class="refTitle">"The Secure Real-time Transport Protocol (SRTP)"</span>, <span class="seriesInfo">RFC 3711</span>, <span class="seriesInfo">DOI 10.17487/RFC3711</span>, <time datetime="2004-03" class="refDate">March 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3711">https://www.rfc-editor.org/rfc/rfc3711</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC4585">[RFC4585]</dt>
-        <dd>
-<span class="refAuthor">Ott, J.</span>, <span class="refAuthor">Wenger, S.</span>, <span class="refAuthor">Sato, N.</span>, <span class="refAuthor">Burmeister, C.</span>, and <span class="refAuthor">J. Rey</span>, <span class="refTitle">"Extended RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/AVPF)"</span>, <span class="seriesInfo">RFC 4585</span>, <span class="seriesInfo">DOI 10.17487/RFC4585</span>, <time datetime="2006-07" class="refDate">July 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4585">https://www.rfc-editor.org/rfc/rfc4585</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC4648">[RFC4648]</dt>
         <dd>
 <span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <span class="seriesInfo">RFC 4648</span>, <span class="seriesInfo">DOI 10.17487/RFC4648</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4648">https://www.rfc-editor.org/rfc/rfc4648</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC5124">[RFC5124]</dt>
+<dt id="RFC4855">[RFC4855]</dt>
         <dd>
-<span class="refAuthor">Ott, J.</span> and <span class="refAuthor">E. Carrara</span>, <span class="refTitle">"Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)"</span>, <span class="seriesInfo">RFC 5124</span>, <span class="seriesInfo">DOI 10.17487/RFC5124</span>, <time datetime="2008-02" class="refDate">February 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5124">https://www.rfc-editor.org/rfc/rfc5124</a>&gt;</span>. </dd>
+<span class="refAuthor">Casner, S.</span>, <span class="refTitle">"Media Type Registration of RTP Payload Formats"</span>, <span class="seriesInfo">RFC 4855</span>, <span class="seriesInfo">DOI 10.17487/RFC4855</span>, <time datetime="2007-02" class="refDate">February 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4855">https://www.rfc-editor.org/rfc/rfc4855</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC7826">[RFC7826]</dt>
+<dt id="RFC6838">[RFC6838]</dt>
         <dd>
-<span class="refAuthor">Schulzrinne, H.</span>, <span class="refAuthor">Rao, A.</span>, <span class="refAuthor">Lanphier, R.</span>, <span class="refAuthor">Westerlund, M.</span>, and <span class="refAuthor">M. Stiemerling, Ed.</span>, <span class="refTitle">"Real-Time Streaming Protocol Version 2.0"</span>, <span class="seriesInfo">RFC 7826</span>, <span class="seriesInfo">DOI 10.17487/RFC7826</span>, <time datetime="2016-12" class="refDate">December 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7826">https://www.rfc-editor.org/rfc/rfc7826</a>&gt;</span>. </dd>
+<span class="refAuthor">Freed, N.</span>, <span class="refAuthor">Klensin, J.</span>, and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6838">https://www.rfc-editor.org/rfc/rfc6838</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8083">[RFC8083]</dt>
         <dd>
@@ -2431,17 +2568,53 @@ instructions of this section.<a href="#section-10-1" class="pilcrow">¶</a></p>
         <dd>
 <span class="refAuthor">Handley, M.</span>, <span class="refAuthor">Perkins, C.</span>, and <span class="refAuthor">E. Whelan</span>, <span class="refTitle">"Session Announcement Protocol"</span>, <span class="seriesInfo">RFC 2974</span>, <span class="seriesInfo">DOI 10.17487/RFC2974</span>, <time datetime="2000-10" class="refDate">October 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2974">https://www.rfc-editor.org/rfc/rfc2974</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC4288">[RFC4288]</dt>
+<dt id="RFC3551">[RFC3551]</dt>
         <dd>
-<span class="refAuthor">Freed, N.</span> and <span class="refAuthor">J. Klensin</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">RFC 4288</span>, <span class="seriesInfo">DOI 10.17487/RFC4288</span>, <time datetime="2005-12" class="refDate">December 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4288">https://www.rfc-editor.org/rfc/rfc4288</a>&gt;</span>. </dd>
+<span class="refAuthor">Schulzrinne, H.</span> and <span class="refAuthor">S. Casner</span>, <span class="refTitle">"RTP Profile for Audio and Video Conferences with Minimal Control"</span>, <span class="seriesInfo">STD 65</span>, <span class="seriesInfo">RFC 3551</span>, <span class="seriesInfo">DOI 10.17487/RFC3551</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3551">https://www.rfc-editor.org/rfc/rfc3551</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3711">[RFC3711]</dt>
+        <dd>
+<span class="refAuthor">Baugher, M.</span>, <span class="refAuthor">McGrew, D.</span>, <span class="refAuthor">Naslund, M.</span>, <span class="refAuthor">Carrara, E.</span>, and <span class="refAuthor">K. Norrman</span>, <span class="refTitle">"The Secure Real-time Transport Protocol (SRTP)"</span>, <span class="seriesInfo">RFC 3711</span>, <span class="seriesInfo">DOI 10.17487/RFC3711</span>, <time datetime="2004-03" class="refDate">March 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3711">https://www.rfc-editor.org/rfc/rfc3711</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4585">[RFC4585]</dt>
+        <dd>
+<span class="refAuthor">Ott, J.</span>, <span class="refAuthor">Wenger, S.</span>, <span class="refAuthor">Sato, N.</span>, <span class="refAuthor">Burmeister, C.</span>, and <span class="refAuthor">J. Rey</span>, <span class="refTitle">"Extended RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/AVPF)"</span>, <span class="seriesInfo">RFC 4585</span>, <span class="seriesInfo">DOI 10.17487/RFC4585</span>, <time datetime="2006-07" class="refDate">July 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4585">https://www.rfc-editor.org/rfc/rfc4585</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5124">[RFC5124]</dt>
+        <dd>
+<span class="refAuthor">Ott, J.</span> and <span class="refAuthor">E. Carrara</span>, <span class="refTitle">"Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)"</span>, <span class="seriesInfo">RFC 5124</span>, <span class="seriesInfo">DOI 10.17487/RFC5124</span>, <time datetime="2008-02" class="refDate">February 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5124">https://www.rfc-editor.org/rfc/rfc5124</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7201">[RFC7201]</dt>
         <dd>
 <span class="refAuthor">Westerlund, M.</span> and <span class="refAuthor">C. Perkins</span>, <span class="refTitle">"Options for Securing RTP Sessions"</span>, <span class="seriesInfo">RFC 7201</span>, <span class="seriesInfo">DOI 10.17487/RFC7201</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7201">https://www.rfc-editor.org/rfc/rfc7201</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7202">[RFC7202]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Perkins, C.</span> and <span class="refAuthor">M. Westerlund</span>, <span class="refTitle">"Securing the RTP Framework: Why RTP Does Not Mandate a Single Media Security Solution"</span>, <span class="seriesInfo">RFC 7202</span>, <span class="seriesInfo">DOI 10.17487/RFC7202</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7202">https://www.rfc-editor.org/rfc/rfc7202</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7656">[RFC7656]</dt>
+        <dd>
+<span class="refAuthor">Lennox, J.</span>, <span class="refAuthor">Gross, K.</span>, <span class="refAuthor">Nandakumar, S.</span>, <span class="refAuthor">Salgueiro, G.</span>, and <span class="refAuthor">B. Burman, Ed.</span>, <span class="refTitle">"A Taxonomy of Semantics and Mechanisms for Real-Time Transport Protocol (RTP) Sources"</span>, <span class="seriesInfo">RFC 7656</span>, <span class="seriesInfo">DOI 10.17487/RFC7656</span>, <time datetime="2015-11" class="refDate">November 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7656">https://www.rfc-editor.org/rfc/rfc7656</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7667">[RFC7667]</dt>
+        <dd>
+<span class="refAuthor">Westerlund, M.</span> and <span class="refAuthor">S. Wenger</span>, <span class="refTitle">"RTP Topologies"</span>, <span class="seriesInfo">RFC 7667</span>, <span class="seriesInfo">DOI 10.17487/RFC7667</span>, <time datetime="2015-11" class="refDate">November 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7667">https://www.rfc-editor.org/rfc/rfc7667</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7826">[RFC7826]</dt>
+        <dd>
+<span class="refAuthor">Schulzrinne, H.</span>, <span class="refAuthor">Rao, A.</span>, <span class="refAuthor">Lanphier, R.</span>, <span class="refAuthor">Westerlund, M.</span>, and <span class="refAuthor">M. Stiemerling, Ed.</span>, <span class="refTitle">"Real-Time Streaming Protocol Version 2.0"</span>, <span class="seriesInfo">RFC 7826</span>, <span class="seriesInfo">DOI 10.17487/RFC7826</span>, <time datetime="2016-12" class="refDate">December 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7826">https://www.rfc-editor.org/rfc/rfc7826</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8298">[RFC8298]</dt>
+        <dd>
+<span class="refAuthor">Johansson, I.</span> and <span class="refAuthor">Z. Sarker</span>, <span class="refTitle">"Self-Clocked Rate Adaptation for Multimedia"</span>, <span class="seriesInfo">RFC 8298</span>, <span class="seriesInfo">DOI 10.17487/RFC8298</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8298">https://www.rfc-editor.org/rfc/rfc8298</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8698">[RFC8698]</dt>
+        <dd>
+<span class="refAuthor">Zhu, X.</span>, <span class="refAuthor">Pan, R.</span>, <span class="refAuthor">Ramalho, M.</span>, and <span class="refAuthor">S. Mena</span>, <span class="refTitle">"Network-Assisted Dynamic Adaptation (NADA): A Unified Congestion Control Scheme for Real-Time Media"</span>, <span class="seriesInfo">RFC 8698</span>, <span class="seriesInfo">DOI 10.17487/RFC8698</span>, <time datetime="2020-02" class="refDate">February 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8698">https://www.rfc-editor.org/rfc/rfc8698</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8888">[RFC8888]</dt>
+      <dd>
+<span class="refAuthor">Sarker, Z.</span>, <span class="refAuthor">Perkins, C.</span>, <span class="refAuthor">Singh, V.</span>, and <span class="refAuthor">M. Ramalho</span>, <span class="refTitle">"RTP Control Protocol (RTCP) Feedback for Congestion Control"</span>, <span class="seriesInfo">RFC 8888</span>, <span class="seriesInfo">DOI 10.17487/RFC8888</span>, <time datetime="2021-01" class="refDate">January 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8888">https://www.rfc-editor.org/rfc/rfc8888</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2453,7 +2626,9 @@ instructions of this section.<a href="#section-10-1" class="pilcrow">¶</a></p>
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">The authors used a large language model to assist with drafting and editing
+text in this document. The authors reviewed all generated text and take full
+responsibility for the content of this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
@@ -2463,15 +2638,15 @@ instructions of this section.<a href="#section-10-1" class="pilcrow">¶</a></p>
       </h2>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Mathis Engelbart</span></div>
-<div dir="auto" class="left"><span class="org">Technical University Munich</span></div>
+<div dir="auto" class="left"><span class="org">Technical University of Munich</span></div>
 <div class="email">
 <span>Email:</span>
-<a href="mailto:mathis.engelbart@tum.de" class="email">mathis.engelbart@tum.de</a>
+<a href="mailto:mathis.engelbart@gmail.com" class="email">mathis.engelbart@gmail.com</a>
 </div>
 </address>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Jörg Ott</span></div>
-<div dir="auto" class="left"><span class="org">Technical University Munich</span></div>
+<div dir="auto" class="left"><span class="org">Technical University of Munich</span></div>
 <div class="email">
 <span>Email:</span>
 <a href="mailto:ott@in.tum.de" class="email">ott@in.tum.de</a>
