@@ -102,22 +102,23 @@ Group (MPEG) has published a Geometry-based Point Cloud Compression (G-PCC)
 standard in {{ISO.IEC.23090-9}}. The G-PCC codec takes as input an unordered
 list of points, optional attributes, and metadata. All points have the same
 number, type, and order of attributes. Attributes can, for example, be the
-color, opacity, reflectance, or frame number of the associated point.
-Compression is defined separately for geometry and attributes. The attribute
-coding depends on the decoded geometry. Thus, geometry encoding and decoding
-happen before attribute encoding and decoding.
+color, opacity, reflectance, normal vector, material identifier, frame number,
+or frame index of the associated point. Compression is defined separately for
+geometry and attributes. The attribute coding depends on the decoded geometry.
+Thus, geometry encoding and decoding happen before attribute encoding and
+decoding.
 
-G-PCC users can choose between two methods for geometry coding and three for
+G-PCC users can choose between two methods for geometry coding and four for
 attribute coding. The geometry coding method called *Octree Coding* is a general
 compression method, while *Predictive tree* coding specifically targets low
-latency applications. The methods for attribute coding are called Region
-Adaptive Hierarchical Transform (RAHT) coding, Predicting Transform, and Lifting
-Transform.
+latency applications. The methods for attribute coding are Region Adaptive
+Hierarchical Transform (RAHT) coding, Level of Detail (LoD) with Predicting
+Transform, LoD with Lifting Transform, and raw attribute data
+({{ISO.IEC.23090-9}}, Table 11).
 
-The output of the encoding process is a sequence of Data Units (DUs). Each
-DU has a type that describes its layout.
-{{table-gpcc-unit-type-descriptions}} lists the ten different types of DUs
-defined in {{ISO.IEC.23090-9}}.
+The output of the encoding process is a sequence of Data Units (DUs). Each DU
+has a type that describes its layout. {{table-gpcc-unit-type-descriptions}}
+lists the ten different types of DUs defined in {{ISO.IEC.23090-9}}.
 
 | Type   | Description                                   |
 | 0      | Sequence parameter set data unit              |
@@ -142,6 +143,17 @@ data units hold references to their associated parameter sets, and each
 referenced parameter set must be available before decoding of the data unit is
 possible.
 
+A coded point cloud frame consists of zero or more slices. A slice consists of a
+GDU, optional redundant GDUs, and an ADU or defaulted attribute DU per
+attribute. A dependent slice requires the preceding slice to be decoded first
+({{ISO.IEC.23090-9}}, Section 6.4.5). A tile inventory DU groups slices into
+tiles with bounding boxes for spatial random access (Section 6.4.7).
+
+A frame boundary marker DU marks the end of a frame. A defaulted attribute DU
+sets one attribute value for all points in a slice. A frame-specific attribute
+properties DU overrides SPS attribute properties for a single frame. A user data
+DU carries application data that the decoder does not interpret.
+
 Coded point clouds do not have dependencies between frames, i.e., decoding a
 point cloud frame is always possible without depending on a previous or
 following frame in a sequence. However, future versions of G-PCC might support
@@ -149,8 +161,10 @@ inter-frame prediction.
 
 Annex A of {{ISO.IEC.23090-9}} describes profiles and levels of the G-PCC codec.
 Decoders can support different profiles and levels. Profiles are subsets of
-algorithmic features of the codec specification. A decoder that supports a
-specific profile must be able to decode a bitstream conforming to that profile.
+algorithmic features of the codec specification. A decoder that conforms to a
+profile at a specific level must be able to decode all bitstreams that conform
+to that profile at a level lower than or equal to the decoder's level
+({{ISO.IEC.23090-9}}, Annex A.3.2).
 
 # Conventions
 
@@ -169,7 +183,8 @@ convenience.
    : Scalar or vector property associated with each *point* in a *point cloud*.
 
 **Bitstream**
-   : A sequence of bits.
+   : Sequence of bits, in the form of encapsulated *data units*, that represents
+   a coded *point cloud sequence*.
 
 **Bounding Box**
    : Axis-aligned cuboid defining a spatial region that bounds a set of
@@ -195,9 +210,9 @@ convenience.
    : *Point cloud* in a *point cloud sequence*.
 
 **Point Cloud Sequence**
-   : Sequence of one or more *pont clouds*.
+   : Sequence of one or more *point clouds*.
 
-**Poisition**
+**Point Position**
    : Three dimensional coordinates of a *point*.
 
 **Slice**
