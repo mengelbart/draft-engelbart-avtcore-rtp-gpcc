@@ -812,10 +812,11 @@ apply ({{ISO.IEC.23090-9}}):
   (Section 6.4.5) unless the ADUs are replaced by defaulted attribute DUs.
 * When `slice_reordering_constraint` in the SPS is 1, removing slices can make
   following slices undecodable (Sections 7.4.2.1.1 and 7.4.3.2). Middleboxes
-  SHOULD NOT drop slices of such bitstreams.
-* When `entropy_continuation_enabled` in the SPS is 1, parsing of a GDU or ADU
-  can depend on DUs of preceding slices (Section 11.6). Middleboxes SHOULD NOT
-  drop GDUs or ADUs of such bitstreams.
+  SHOULD NOT drop slices of such bitstreams. In addition, when
+  `entropy_continuation_enabled` in the SPS is 1, parsing of a GDU or ADU can
+  depend on DUs of preceding slices (Section 11.6). Middleboxes SHOULD NOT drop
+  GDUs or ADUs of such bitstreams. `entropy_continuation_enabled` can only be 1
+  when `slice_reordering_constraint` is 1 (Section 7.4.2.1.1).
 * Middleboxes SHOULD drop either all or none of the fragments of a DU.
 
 # IANA Considerations
