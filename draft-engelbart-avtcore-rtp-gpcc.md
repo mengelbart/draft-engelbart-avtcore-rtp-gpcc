@@ -294,14 +294,14 @@ The format of the RTP header is specified in {{!RFC3550}} and replicated in {{fi
    : Set and used in accordance with {{!RFC3550}}.
 
 **Timestamp: 32 bits**
-   : The RTP timestamp is set to the sampling timestamp of the content. A 90 kHz
-   clock rate MUST be used. The sampling timestamp of the content is the
-   reconstruction time. It denotes the earliest sampling time of all points in the
-   point cloud frame to which the data unit transmitted in the packet belongs.
-   If the data unit has no timing properties (e.g., parameter sets), the RTP
-   timestamp is set to the RTP timestamp of the first data unit that references
-   the parameter set. If the packet is an aggregation unit packet, all data
-   units MUST have the same timestamp.
+   : A 90 kHz clock rate MUST be used. The RTP timestamp MUST be set to the
+   sampling time of the point cloud frame to which the DUs carried in the packet
+   belong. The sampling time of a point cloud frame is the earliest sampling
+   time of all points in the frame. For an empty frame, the sampling time is the
+   time at which the frame was captured, e.g., the start of the sensor scan that
+   produced no points. DUs sent between the last DU of one frame and the first
+   DU of the next frame, such as parameter sets, tile inventories, or user data,
+   use the RTP timestamp of the next frame.
 
 **Synchronization source (SSRC): 32 bits**
    : Used to identify the source of the RTP packets.
@@ -392,9 +392,7 @@ so that the resulting IP packet is smaller than the MTU size in order to avoid
 IP layer fragmentation. An aggregation packet MUST NOT contain any fragmentation
 units.
 
-An aggregation packet MUST NOT carry DUs of different point cloud
-frames, i.e., all DUs included in an aggregation packet MUST have
-the same timestamp.
+An aggregation packet MUST NOT carry DUs of different point cloud frames.
 
 The packet type field of every DU in an aggregation packet MUST be
 set to the value one (binary `001`).
