@@ -162,7 +162,7 @@ Decoders can support different profiles and levels. Profiles are subsets of
 algorithmic features of the codec specification. A decoder that conforms to a
 profile at a specific level must be able to decode all bitstreams that conform
 to that profile at a level lower than or equal to the decoder's level
-({{ISO.IEC.23090-9}}, Annex A.3.2).
+({{ISO.IEC.23090-9}}, Section A.3.2).
 
 # Conventions
 
@@ -255,13 +255,14 @@ convenience.
 
 # Payload Format
 
-This section describes the details of the RTP payload format. {{rtp-header}}
+This section describes the details of the RTP payload format.
+{{transmission-mode}} describes the supported transmission mode, {{rtp-header}}
 describes the usage of the standard RTP header fields, {{payload-header}}
 describes the details of the payload header following the RTP header, and
-{{payload-structures}} gives details about available packetization modes and the
-specifics of their respective formats.
+{{payload-structures}} gives details about the available payload structures and
+the specifics of their respective formats.
 
-## Transmission Mode
+## Transmission Mode {#transmission-mode}
 
 This payload format supports only single RTP stream transmission. A G-PCC
 bitstream MUST be carried in a single RTP stream, as defined in {{?RFC7656}}, on
@@ -341,7 +342,7 @@ and Unit Type fields.
 
 **Unit Type: 5 bits**
   : The type of the following data unit. This field carries the `tlv_type` value
-  of the type-length-value encapsulation defined in Annex-B of G-PCC
+  of the type-length-value encapsulation defined in Annex B of
   {{ISO.IEC.23090-9}} and shown in {{table-gpcc-unit-type-descriptions}}. The
   `tlv_type` field in {{ISO.IEC.23090-9}} is 8 bits long, but only values 0 to
   31 can be carried in the Unit Type field. DUs with a type larger than 31
@@ -660,14 +661,14 @@ This section describes the media type registration following {{!RFC6838}} and
   : A decimal representation of the `level_idc` syntax element of the SPS as
   defined in {{ISO.IEC.23090-9}}, Section 7.3.2.1, i.e., 20 times the level
   number (e.g., `80` for level 4). The value is in the range 0 to 255. Only
-  values corresponding to levels defined in {{ISO.IEC.23090-9}}, Annex A.4.1
+  values corresponding to levels defined in {{ISO.IEC.23090-9}}, Section A.4.1
   (currently `80` and `120`) are valid. When used to describe a bitstream, it is
   the level to which the bitstream conforms. When used to describe receiver
   capabilities, it is the highest level that the receiver supports for all
   profiles indicated in profile-compatibility. Levels are compared by their
-  `level_idc` value as specified in {{ISO.IEC.23090-9}}, Annex A.4.1. A receiver
-  that supports different levels for different profiles can offer multiple
-  payload types, each with a single level.
+  `level_idc` value as specified in {{ISO.IEC.23090-9}}, Section A.4.1. A
+  receiver that supports different levels for different profiles can offer
+  multiple payload types, each with a single level.
 
 ## SDP Parameters
 
@@ -844,7 +845,7 @@ The receiver-side computational complexity of G-PCC decoding is not uniform. A
 small amount of coded data can represent a large number of points. For example,
 the syntax elements `occ_dup_point_cnt`, `direct_dup_point_cnt`, and
 `ptn_dup_point_cnt` can each signal up to MaxSlicePoints - 1 points with
-identical positions ({{ISO.IEC.23090-9}}, Annex A.5), where MaxSlicePoints is
+identical positions ({{ISO.IEC.23090-9}}, Table A.9), where MaxSlicePoints is
 2^20 for all levels defined in {{ISO.IEC.23090-9}}, Table A.2. The level limits
 apply per slice and do not limit the number of slices or points per frame, the
 frame rate, or the bitrate. As stated in {{ISO.IEC.23090-9}}, Section 7.4.3.3,
