@@ -118,17 +118,17 @@ The output of the encoding process is a sequence of Data Units (DUs). Each DU
 has a type that describes its layout. {{table-gpcc-unit-type-descriptions}}
 lists the ten different types of DUs defined in {{ISO.IEC.23090-9}}.
 
-| Type   | Description                                   |
-| 0      | Sequence parameter set data unit              |
-| 1      | Geometry parameter set data unit              |
-| 2      | Geometry data unit                            |
-| 3      | Attribute parameter set data unit             |
-| 4      | Attribute data unit                           |
-| 5      | Tile inventory data unit                      |
-| 6      | Frame boundary marker data unit               |
-| 7      | Defaulted attribute data unit                 |
-| 8      | Frame-specific attribute properties data unit |
-| 9      | User data data unit                           |
+| DU type | Description                                   |
+| 0       | Sequence parameter set data unit              |
+| 1       | Geometry parameter set data unit              |
+| 2       | Geometry data unit                            |
+| 3       | Attribute parameter set data unit             |
+| 4       | Attribute data unit                           |
+| 5       | Tile inventory data unit                      |
+| 6       | Frame boundary marker data unit               |
+| 7       | Defaulted attribute data unit                 |
+| 8       | Frame-specific attribute properties data unit |
+| 9       | User data data unit                           |
 {: #table-gpcc-unit-type-descriptions title="G-PCC data unit types"}
 
 Sequence Parameter Set (SPS), Geometry Parameter Set (GPS), and Attribute
@@ -317,67 +317,67 @@ The format of the RTP header is specified in {{!RFC3550}} and replicated in {{fi
 ## Payload Header Usage {#payload-header}
 
 The first byte of the payload of an RTP packet is referred to as the payload
-header. The payload header consists of a packet type and unit type field.
+header. The payload header consists of the Packet Type and Unit Type fields.
 
 ~~~
  0
  0 1 2 3 4 5 6 7
 +-+-+-+-+-+-+-+-+
-| Typ |Unit-Type|
+|Type |Unit Type|
 +-+-+-+-+-+-+-+-+
 ~~~
 {: #fig-payload-header title="General Payload Header"}
 
 {: vspace="0"}
-**Typ: 3 bits**
+**Packet Type: 3 bits**
   : Type of the packet. This field indicates if the packet is a single unit
-  packet, an aggregation unit packet, or a fragmentation unit packet. See
+  packet, an aggregation packet, or a fragmentation packet. See
   {{payload-structures}} for details. Senders MUST NOT use the values marked as
   reserved in {{table-type-field}}. Receivers MUST discard packets with a
-  reserved Typ value.
+  reserved Packet Type value.
 
-**Unit-Type: 5 bits**
-  : The type of the following data unit. This field specifies the type field
-  from the type-length-value encapsulation defined in Annex-B of G-PCC
+**Unit Type: 5 bits**
+  : The type of the following data unit. This field carries the `tlv_type` value
+  of the type-length-value encapsulation defined in Annex-B of G-PCC
   {{ISO.IEC.23090-9}} and shown in {{table-gpcc-unit-type-descriptions}}. The
   `tlv_type` field in {{ISO.IEC.23090-9}} is 8 bits long, but only values 0 to
-  31 can be carried in the Unit-Type field. DUs with a type larger than 31
+  31 can be carried in the Unit Type field. DUs with a type larger than 31
   cannot be carried by this payload format. Senders MUST NOT send DUs with a
-  Unit-Type value not listed in {{table-gpcc-unit-type-descriptions}}. Receivers
+  Unit Type value not listed in {{table-gpcc-unit-type-descriptions}}. Receivers
   MUST discard such DUs.
 
 ## Payload Structures {#payload-structures}
 
-Three different RTP packet payload structures are specified: Single Unit
-Packets, Aggregation Unit Packets, and Fragmentation Unit Packets. A receiver
-can identify the payload structure by the type field of
-the payload header. The type field indicates whether the unit is a single unit,
-an aggregation unit, or the first, last, or middle part of a fragmentation unit
-packet. The type field MUST be set according to {{table-type-field}}.
+Three different RTP packet payload structures are specified: single unit
+packets, aggregation packets, and fragmentation packets. A receiver can identify
+the payload structure by the Packet Type field of the payload header. The Packet
+Type field indicates whether the packet is a single unit packet, an aggregation
+packet, or the first, a middle, or the last fragmentation packet of a fragmented
+DU. The Packet Type field MUST be set according to {{table-type-field}}.
 
-| Type   | Description                                                         |
-| 000    | Single Unit Packet {{single-unit}}                                  |
-| 001    | Aggregation Unit Packet {{aggregation-packet}}                      |
-| 010    | First packet of a fragmentation unit packet {{fragmentation-unit}}  |
-| 011    | Fragmentation unit packet {{fragmentation-unit}}                    |
-| 100    | Last packet of a fragmentation unit packet {{fragmentation-unit}}   |
-| 101    | Reserved                                                            |
-| 110    | Reserved                                                            |
-| 111    | Reserved                                                            |
-{: #table-type-field title="Type field values"}
+| Packet Type | Description                                          |
+| 000         | Single unit packet {{single-unit-packet}}            |
+| 001         | Aggregation packet {{aggregation-packet}}            |
+| 010         | First fragmentation packet {{fragmentation-packet}}  |
+| 011         | Middle fragmentation packet {{fragmentation-packet}} |
+| 100         | Last fragmentation packet {{fragmentation-packet}}   |
+| 101         | Reserved                                             |
+| 110         | Reserved                                             |
+| 111         | Reserved                                             |
+{: #table-type-field title="Packet Type field values"}
 
 The following sections explain the details and variations from this format for
 the three packet types.
 
-### Single Unit {#single-unit}
+### Single Unit Packet {#single-unit-packet}
 
-A Single Unit packet contains only one data unit. The first byte in the packet
+A single unit packet contains only one data unit. The first byte in the packet
 is the payload header, followed by the payload data. The data unit extends until
 the end of the packet, excluding any RTP padding. The DU is carried without its
-TLV header. The packet type field of a single unit packet MUST be set to zero
+TLV header. The Packet Type field of a single unit packet MUST be set to zero
 (binary `000`).
 
-{{fig-single-unit-payload}} shows an example of a single unit packet.
+{{fig-single-unit-packet}} shows an example of a single unit packet.
 
 ~~~
  0                   1                   2                   3
@@ -391,51 +391,49 @@ TLV header. The packet type field of a single unit packet MUST be set to zero
 |                               :...OPTIONAL RTP padding        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
-{: #fig-single-unit-payload title="Single unit packet payload"}
+{: #fig-single-unit-packet title="Single unit packet payload"}
 
 ### Aggregation Packet {#aggregation-packet}
 
 An aggregation packet contains two or more DUs. Aggregation packets can reduce
 packetization and header overhead for small DUs such as parameter sets. Each DU
-is prefixed with a separate payload header and a Size field. The Size field is a
-16-bit unsigned integer in network byte order indicating the length of the
-following DU in bytes, excluding the payload header and the Size field. DUs are
-carried without their TLV header. There is no padding between the DUs of an
-aggregation packet, i.e., the payload header of a DU directly follows the last
-byte of the preceding DU.
+is prefixed with a separate payload header and a Size field, forming an
+aggregation unit. The Size field is a 16-bit unsigned integer in network byte
+order indicating the length of the following DU in bytes, excluding the payload
+header and the Size field. DUs are carried without their TLV header. There is no
+padding between the DUs of an aggregation packet, i.e., the payload header of a
+DU directly follows the last byte of the preceding DU.
 
-An aggregation packet MUST carry at least two DUs. Aggregation
-packets MAY carry more than two DUs. The total amount of data in
-an aggregation packet MUST fit into an IP packet, and the size SHOULD be chosen
-so that the resulting IP packet is smaller than the MTU size in order to avoid
-IP layer fragmentation. An aggregation packet MUST NOT contain any fragmentation
-units.
+An aggregation packet MUST carry at least two DUs. Aggregation packets MAY carry
+more than two DUs. The total amount of data in an aggregation packet MUST fit
+into an IP packet, and the size SHOULD be chosen so that the resulting IP packet
+is smaller than the MTU size in order to avoid IP layer fragmentation. An
+aggregation packet MUST NOT contain fragments of DUs.
 
 An aggregation packet MUST NOT carry DUs of different point cloud frames.
 
-The packet type field of every DU in an aggregation packet MUST be
+The Packet Type field of every aggregation unit in an aggregation packet MUST be
 set to the value one (binary `001`).
 
 A receiver parses the DUs of an aggregation packet in order, after removing any
-RTP padding. If a payload header with a packet type field other than `001` is
+RTP padding. If a payload header with a Packet Type field other than `001` is
 found, if the Size field of a DU indicates more bytes than remain in the packet,
 or if bytes remain after the last DU that do not form a complete payload header,
 Size field, and DU, the receiver MUST discard the remainder of the packet,
 starting with the affected DU. DUs preceding it in the packet are not affected.
 
-{{fig-aggregation-header}} shows the extended payload header format of syntax
-structures in aggregation packets.
+{{fig-aggregation-header}} shows the format of an aggregation unit.
 
 ~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|Typ=1|Unit-Type|            Size               |   Data Unit  ...
+|Type |Unit Type|            Size               |   Data Unit  ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
-{: #fig-aggregation-header title="Aggregation Unit Payload"}
+{: #fig-aggregation-header title="Aggregation unit format"}
 
-An example of an aggregation unit packet with two data unit payloads is shown in
+An example of an aggregation packet with two aggregation units is shown in
 {{fig-aggregation-format}}.
 
 ~~~
@@ -458,27 +456,27 @@ An example of an aggregation unit packet with two data unit payloads is shown in
 |                               :...OPTIONAL RTP padding        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
-{: #fig-aggregation-format title="Packet Payload"}
+{: #fig-aggregation-format title="Aggregation packet payload with two aggregation units"}
 
-### Fragmentation Unit {#fragmentation-unit}
+### Fragmentation Packet {#fragmentation-packet}
 
-Fragmentation units allow fragmentation of single DUs into multiple RTP packets
+Fragmentation packets allow a single DU to be split into multiple RTP packets
 without cooperation from the G-PCC encoder. A DU that does not fit into a single
 RTP packet without exceeding the path MTU SHOULD be fragmented. Fragments of the
 same DU MUST be sent in consecutive order with ascending RTP sequence numbers
 (with no other RTP packets within the same RTP stream being sent between the
 first and last fragment).
 
-Aggregation packets MUST NOT be fragmented. Fragmentation units MUST NOT be
-nested, i.e., a fragmentation unit cannot contain a subset of another
-fragmentation unit.
+Aggregation packets MUST NOT be fragmented. Fragmentation packets MUST NOT be
+nested, i.e., a fragmentation packet cannot contain a fragment of another
+fragmentation packet.
 
-A fragmentation unit consists of the payload header followed by a fragment of
+A fragmentation packet consists of the payload header followed by a fragment of
 the DU. The fragment extends until the end of the packet, excluding any RTP
 padding. It is a sequence of consecutive bytes of the DU, without the TLV
-header. The DU is the concatenation of the fragments of all fragmentation units
-of the series, in RTP sequence number order. {{fig-fragmentation-unit}} shows
-the format of a fragmentation unit.
+header. The DU is the concatenation of the fragments of all fragmentation
+packets of the series, in RTP sequence number order.
+{{fig-fragmentation-packet}} shows the format of a fragmentation packet.
 
 ~~~
  0                   1                   2                   3
@@ -492,37 +490,38 @@ the format of a fragmentation unit.
 |                               :...OPTIONAL RTP padding        |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
-{: #fig-fragmentation-unit title="Fragmentation unit payload"}
+{: #fig-fragmentation-packet title="Fragmentation packet payload"}
 
-The type field of the first packet of a series of fragmentation units MUST be
-set to 2 (binary `010`), the type field of the last packet in the series MUST be
-set to four (binary `100`), and the type field of all packets between the first
-and last packet of the fragmented unit MUST have the value three (binary `011`).
+The Packet Type field of the first fragmentation packet of a fragmented DU MUST
+be set to two (binary `010`), the Packet Type field of the last fragmentation
+packet MUST be set to four (binary `100`), and the Packet Type field of all
+fragmentation packets between the first and the last MUST be set to three
+(binary `011`).
 
-The Unit-Type field of every fragmentation unit MUST be set to the type of the
+The Unit Type field of every fragmentation packet MUST be set to the type of the
 fragmented DU.
 
-A fragmented DU MUST be carried in at least two fragmentation units, i.e., a DU
-MUST NOT be sent as a single fragmentation unit. Each fragmentation unit MUST
-carry a non-empty fragment.
+A fragmented DU MUST be carried in at least two fragmentation packets, i.e., a
+DU MUST NOT be sent as a single fragmentation packet. Each fragmentation packet
+MUST carry a non-empty fragment.
 
-The timestamp of all fragmentation units MUST be set to the same value: the
-timestamp of the DU that is carried in the fragmentation unit packets.
+The timestamp of all fragmentation packets MUST be set to the same value: the
+timestamp of the fragmented DU.
 
-A receiver reassembles a DU from a series of fragmentation units that starts
-with a first fragmentation unit (`010`), continues with zero or more middle
-fragmentation units (`011`), and ends with a last fragmentation unit (`100`),
-all with consecutive RTP sequence numbers, the same RTP timestamp, and the same
-Unit-Type. A receiver MUST treat the series as incomplete and MUST discard the
-fragments received so far if any of the following occurs:
+A receiver reassembles a DU from a series of fragmentation packets that starts
+with a first fragmentation packet (`010`), continues with zero or more middle
+fragmentation packets (`011`), and ends with a last fragmentation packet
+(`100`), all with consecutive RTP sequence numbers, the same RTP timestamp, and
+the same Unit Type. A receiver MUST treat the series as incomplete and MUST
+discard the fragments received so far if any of the following occurs:
 
 * a gap in RTP sequence numbers between the first and the last fragmentation
-  unit,
-* a middle or last fragmentation unit that is not preceded by a first
-  fragmentation unit of the same series,
-* a first fragmentation unit, or a packet other than a fragmentation unit,
-  before the last fragmentation unit of the series,
-* a change in RTP timestamp or Unit-Type within the series.
+  packet,
+* a middle or last fragmentation packet that is not preceded by a first
+  fragmentation packet of the same series,
+* a first fragmentation packet, or a packet other than a fragmentation packet,
+  before the last fragmentation packet of the series,
+* a change in RTP timestamp or Unit Type within the series.
 
 A receiver MUST NOT pass incomplete DUs to the decoder.
 
@@ -554,12 +553,12 @@ appear in the packet. To do so, a receiver performs the following steps:
   duplicated or outdated RTP packets (as indicated by the RTP sequence number
   and the RTP timestamp) are removed, and packets are reordered by RTP sequence
   number.
-* The DUs are extracted from each packet according to the packet type
+* The DUs are extracted from each packet according to the Packet Type field
   ({{payload-structures}}). Fragments of a DU are reassembled as described in
-  {{fragmentation-unit}}, which also defines the handling of incomplete DUs.
+  {{fragmentation-packet}}, which also defines the handling of incomplete DUs.
 * Each DU is passed to the decoder as a TLV encapsulation structure as defined
-  in Annex B of {{ISO.IEC.23090-9}}, with `tlv_type` set to the Unit-Type of
-  the payload header and `tlv_num_payload_bytes` set to the length of the DU in
+  in Annex B of {{ISO.IEC.23090-9}}, with `tlv_type` set to the Unit Type of the
+  payload header and `tlv_num_payload_bytes` set to the length of the DU in
   bytes.
 
 To determine the exact time for decoding, factors such as a possible intentional
