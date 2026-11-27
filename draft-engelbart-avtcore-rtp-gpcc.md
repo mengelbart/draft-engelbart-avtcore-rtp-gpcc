@@ -357,10 +357,10 @@ packet. The type field MUST be set according to {{table-type-field}}.
 
 | Type   | Description                                                         |
 | 000    | Single Unit Packet {{single-unit}}                                  |
-| 001    | Aggregation Unit Packet {{aggregation-packet}}                        |
-| 010    | First packet of an fragmentation unit packet {{fragmentation-unit}} |
+| 001    | Aggregation Unit Packet {{aggregation-packet}}                      |
+| 010    | First packet of a fragmentation unit packet {{fragmentation-unit}}  |
 | 011    | Fragmentation unit packet {{fragmentation-unit}}                    |
-| 100    | Last packet of an fragmentation unit packet {{fragmentation-unit}}  |
+| 100    | Last packet of a fragmentation unit packet {{fragmentation-unit}}   |
 | 101    | Reserved                                                            |
 | 110    | Reserved                                                            |
 | 111    | Reserved                                                            |
@@ -754,12 +754,12 @@ Streaming Protocol (RTSP) {{!RFC7826}} or Session Announcement Protocol (SAP)
 # Congestion Control
 
 Congestion control for RTP SHALL be used in accordance with {{!RFC3550}}, and
-with any applicable RTP profile: e.g., {{!RFC3551}}.  An additional requirement
-if best-effort service is being used is users of this payload format MUST
-monitor packet loss to ensure that the packet loss rate is within acceptable
-parameters. Circuit Breakers {{!RFC8083}} is an update to RTP {{!RFC3550}} that
-defines criteria for when one is required to stop sending RTP Packet Streams.
-RTP circuit breakers {{!RFC8083}} MUST be implemented and followed.
+with any applicable RTP profile: e.g., {{!RFC3551}}.  If best-effort service is
+being used, users of this payload format MUST monitor packet loss to ensure that
+the packet loss rate is within acceptable parameters. Circuit Breakers
+{{!RFC8083}} is an update to RTP {{!RFC3550}} that defines criteria for when one
+is required to stop sending RTP Packet Streams. RTP circuit breakers
+{{!RFC8083}} MUST be implemented and followed.
 
 Applications SHOULD also use a congestion control algorithm for interactive
 real-time media, such as {{?RFC8298}} or {{?RFC8698}}, which can use the RTCP
@@ -810,18 +810,18 @@ IANA is requested to register the media type application/gpcc, as specified in
 
 RTP packets using the payload format defined in this specification are subject
 to the security considerations discussed in the RTP specification {{!RFC3550}},
-and in any applicable RTP profile such as RTP/AVP {{!RFC3551}}, RTP/AVPF {{!RFC4585}},
-RTP/SAVP {{!RFC3711}}, or RTP/ SAVPF {{!RFC5124}}.  However, as "Securing the RTP
-Protocol Framework: Why RTP Does Not Mandate a Single Media Security Solution"
-{{?RFC7202}} discusses, it is not an RTP payload format's responsibility to discuss
-or mandate what solutions are used to meet the basic security goals like
-confidentiality, integrity, and source authenticity for RTP in general.  This
-responsibility lays on anyone using RTP in an application.  They can find
-guidance on available security mechanisms and important considerations in
-"Options for Securing RTP Sessions" {{?RFC7201}}.  Applications SHOULD use one or
-more appropriate strong security mechanisms.  The rest of this Security
-Considerations section discusses the security impacting properties of the
-payload format itself.
+and in any applicable RTP profile such as RTP/AVP {{!RFC3551}}, RTP/AVPF
+{{!RFC4585}}, RTP/SAVP {{!RFC3711}}, or RTP/SAVPF {{!RFC5124}}.  However, as
+"Securing the RTP Protocol Framework: Why RTP Does Not Mandate a Single Media
+Security Solution" {{?RFC7202}} discusses, it is not an RTP payload format's
+responsibility to discuss or mandate what solutions are used to meet the basic
+security goals like confidentiality, integrity, and source authenticity for RTP
+in general.  This responsibility lies on anyone using RTP in an application.
+They can find guidance on available security mechanisms and important
+considerations in "Options for Securing RTP Sessions" {{?RFC7201}}.
+Applications SHOULD use one or more appropriate strong security mechanisms.  The
+rest of this Security Considerations section discusses the security impacting
+properties of the payload format itself.
 
 The receiver-side computational complexity of G-PCC decoding is not uniform. A
 small amount of coded data can represent a large number of points. For example,
