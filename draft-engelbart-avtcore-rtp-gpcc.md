@@ -76,10 +76,9 @@ environments or objects. The payload format enables the streaming of compressed
 point clouds in real-time applications. It applies to various use cases, such as
 autonomous vehicles and virtual reality.
 
-In addition to describing the payload format, this document also includes
-examples of the payload format, provides guidance on how to negotiate the
-parameters to be used with the format, and discusses congestion control and rate
-adaptation of point cloud streaming applications.
+In addition to describing the payload format, this document provides guidance
+on how to negotiate the parameters to be used with the format, and discusses
+congestion control and rate adaptation of point cloud streaming applications.
 
 ## Background on Point Clouds
 
