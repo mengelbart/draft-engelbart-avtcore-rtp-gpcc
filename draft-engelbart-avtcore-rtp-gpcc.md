@@ -458,22 +458,45 @@ and last packet of the fragmented unit MUST have the value three (binary `011`).
 
 # Packetization Rules and Depacketization Rules
 
+## Packetization Rules
+
+* DUs MUST be transmitted in decoding order, i.e., in the order in which they
+  appear in the G-PCC bitstream as defined in Annex B of {{ISO.IEC.23090-9}}.
+  The RTP sequence number of a packet carrying a DU MUST be higher (modulo
+  2^16) than the RTP sequence number of any packet carrying a DU that precedes
+  it in decoding order.
+* Within an aggregation packet, DUs MUST appear in decoding order.
 * A DU of a small size SHOULD be encapsulated in an aggregation
   packet together with one or more other DUs in order to avoid the
   unnecessary packetization overhead for small DUs. For example,
-  parameter sets are typically small and can often be aggregated with without
+  parameter sets are typically small and can often be aggregated without
   violating MTU size constraints.
 * For carrying exactly one DU in an RTP packet, a single unit
   packet MUST be used.
 
-The de-packetization process is implementation dependent. Therefore, the
-following de-packetization rules SHOULD be taken as an example.
+## Depacketization Rules
+
+A receiver MUST pass DUs to the decoder in RTP sequence number order. Within an
+aggregation packet, DUs MUST be passed to the decoder in the order in which they
+appear in the packet. To do so, a receiver performs the following steps:
 
 * All normal RTP mechanisms related to buffer management apply. In particular,
   duplicated or outdated RTP packets (as indicated by the RTP sequence number
-  and the RTP timestamp) are removed. To determine the exact time for decoding,
-  factors such as a possible intentional delay to allow for proper inter-stream
-  synchronization must be factored in.
+  and the RTP timestamp) are removed, and packets are reordered by RTP sequence
+  number.
+* The DUs are extracted from each packet according to the packet type
+  ({{payload-structures}}). Fragments of a DU are reassembled as described in
+  {{fragmentation-unit}}. A DU for which one or more fragments are missing is
+  incomplete and is discarded.
+* Each DU is passed to the decoder as a TLV encapsulation structure as defined
+  in Annex B of {{ISO.IEC.23090-9}}, with `tlv_type` set to the Unit-Type of
+  the payload header and `tlv_num_payload_bytes` set to the length of the DU in
+  bytes.
+
+To determine the exact time for decoding, factors such as a possible intentional
+delay to allow for proper inter-stream synchronization need to be factored in.
+How long a receiver waits for reordered or retransmitted packets before
+considering them lost is implementation dependent.
 
 # Payload Format Parameters
 
