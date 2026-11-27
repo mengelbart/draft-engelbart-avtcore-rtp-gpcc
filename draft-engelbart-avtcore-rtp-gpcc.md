@@ -680,13 +680,14 @@ Description Protocol (SDP) {{!RFC8866}} as follows:
 
 ### Examples
 
-The following example shows the media description of an offer for a stream
+The following example shows the media description of an offer to send a stream
 conforming to the Simple profile at level 4:
 
 ~~~
 m=application 49170 RTP/AVP 96
 a=rtpmap:96 gpcc/90000
 a=fmtp:96 profile-compatibility=800000;level-idc=80
+a=sendonly
 ~~~
 
 In the following example, the offerer is able to receive bitstreams conforming
