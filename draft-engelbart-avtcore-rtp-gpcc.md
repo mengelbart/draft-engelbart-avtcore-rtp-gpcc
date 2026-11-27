@@ -784,11 +784,32 @@ more appropriate strong security mechanisms.  The rest of this Security
 Considerations section discusses the security impacting properties of the
 payload format itself.
 
-This RTP payload format and its media decoder do not exhibit any significant
-non-uniformity in the receiver-side computational complexity for packet
-processing, and thus are unlikely to pose a denial-of-service threat due to the
-receipt of pathological data. Nor does the RTP payload format contain any active
-content.
+The receiver-side computational complexity of G-PCC decoding is not uniform. A
+small amount of coded data can represent a large number of points. For example,
+the syntax elements `occ_dup_point_cnt`, `direct_dup_point_cnt`, and
+`ptn_dup_point_cnt` can each signal up to MaxSlicePoints - 1 points with
+identical positions ({{ISO.IEC.23090-9}}, Annex A.5), where MaxSlicePoints is
+2^20 for all levels defined in {{ISO.IEC.23090-9}}, Table A.2. The level limits
+apply per slice and do not limit the number of slices or points per frame, the
+frame rate, or the bitrate. As stated in {{ISO.IEC.23090-9}}, Section 7.4.3.3,
+decoders cannot rely on bitstream conformance to prevent overflow of
+implementation buffers. Receivers SHOULD enforce local limits, e.g., on the
+number of points per slice and per frame, the number of slices per frame, and
+the size of DUs, and SHOULD discard data that exceeds them.
+
+The TLV encapsulation allows DUs of up to 2^32 - 1 bytes, and fragmented DUs are
+reassembled in receiver memory. Receivers SHOULD limit the size of DUs they
+reassemble and SHOULD discard incomplete DUs that are not completed within an
+implementation-specific time. Receivers MUST validate the Size field of each DU
+in an aggregation packet against the remaining length of the packet as described
+in {{aggregation-packet}}.
+
+This RTP payload format does not contain active content. User data DUs carry
+data not specified by {{ISO.IEC.23090-9}}, which receivers that interpret it
+MUST treat as untrusted input.
+
+Point clouds can capture people and private spaces. Applications SHOULD use
+confidentiality mechanisms appropriate for the captured content.
 
 # RFC Editor Considerations
 
