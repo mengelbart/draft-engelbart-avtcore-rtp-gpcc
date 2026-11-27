@@ -60,9 +60,9 @@ compression (G-PCC). The RTP payload format defined in this document supports
 the packetization of one or more data units in an RTP packet payload and the
 fragmentation of a single data unit into multiple RTP packets. This memo also
 discusses congestion control and rate adaptation for the real-time streaming of
-point clouds. Finally, the document defines parameters that may be used to
-select optional features of the payload format or signal properties of the RTP
-stream. The parameters can be used with the Session Description Protocol (SDP).
+point clouds. Finally, the document defines media type parameters that signal
+the profile and level of the G-PCC bitstream, and their use with the Session
+Description Protocol (SDP).
 
 --- middle
 
