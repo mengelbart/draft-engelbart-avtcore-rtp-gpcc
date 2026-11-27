@@ -730,6 +730,11 @@ profile-compatibility and level-idc:
   bitstream that the offerer will send. An answerer that is able to receive the
   bitstream MUST use the same values in the answer. Otherwise, it MUST remove
   the payload type from the answer.
+* In an answer for a stream with direction sendonly, the parameters describe the
+  bitstream that the answerer will send. The values MUST fulfill the conditions
+  below for the profiles and level declared in the offer. An answerer that is
+  not able to send such a bitstream MUST remove the payload type from the
+  answer.
 * A bitstream sent to a receiver MUST indicate conformance to at least one of
   the profiles indicated by the receiver in profile-compatibility, and MUST
   conform to a level that is lower than or equal to the level indicated by the
