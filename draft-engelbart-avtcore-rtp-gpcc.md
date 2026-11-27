@@ -248,9 +248,11 @@ describes the details of the payload header following the RTP header, and
 {{payload-structures}} gives details about available packetization modes and the
 specifics of their respective formats.
 
-## Transmission Modes
+## Transmission Mode
 
-> **TODO**: Do we need this section on transmission modes similar to other payload formats to define SRST, MRST, and MRMT?
+This payload format supports only single RTP stream transmission. A G-PCC
+bitstream MUST be carried in a single RTP stream, as defined in {{?RFC7656}}, on
+a single RTP session.
 
 ## RTP Header Usage {#rtp-header}
 
@@ -272,17 +274,10 @@ The format of the RTP header is specified in {{!RFC3550}} and replicated in {{fi
 ~~~
 {: #fig-header title="RTP Header format as specified in RFC 3550"}
 
-> **TODO**: if we add a dedicated subsection on SRST/SRMT/MRMT, add the
-> following statement:
->
-> When MRST or MRMT is in use, if an access unit appears in multiple RTP
-> streams, the marker bit is set on each RTP stream's last packet of the access
-> unit.
-
 {: vspace="0"}
 
 **Marker bit (M): 1 bit**
-   : Set to 1 for the last packet of a point cloud frame carried in the current RTP stream.
+   : Set to 1 for the last packet of a point cloud frame.
 
 **Payload Type (PT): 7 bits**
    : The assignment of an RTP payload type for this new packet format is outside
