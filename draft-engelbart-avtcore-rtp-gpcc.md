@@ -780,11 +780,14 @@ middlebox needs to rewrite sequence numbers, RTCP reports, aggregation packets,
 and the marker bit, so that dropped DUs do not appear as packet loss.
 
 Frames are coded independently ({{ISO.IEC.23090-9}}, Section 6.4.4), so a
-middlebox can drop all DUs of a frame except parameter sets. When dropping only
-some DUs of a frame, the following dependencies apply ({{ISO.IEC.23090-9}}):
+middlebox can drop all DUs of a frame except parameter sets and tile
+inventories. When dropping only some DUs of a frame, the following dependencies
+apply ({{ISO.IEC.23090-9}}):
 
 * Parameter sets are needed to decode all DUs that reference them. Middleboxes
   SHOULD NOT drop them.
+* A tile inventory applies to all following frames until it is replaced by
+  another tile inventory (Section 7.4.2.4). Middleboxes SHOULD NOT drop it.
 * Frame-specific attribute properties DUs override attribute properties of the
   SPS, such as scale and offset, for a single frame. Without them, decoded
   attribute values of the frame can be misinterpreted. Middleboxes SHOULD NOT
