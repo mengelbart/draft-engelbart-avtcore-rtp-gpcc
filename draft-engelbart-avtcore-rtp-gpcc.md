@@ -637,26 +637,30 @@ This section describes the media type registration following {{!RFC6838}} and
 
 {: vspace="0"}
 **profile-compatibility**:
-  : A base16 {{!RFC4648}} (hexadecimal) representation of three bytes. The first
-  22 bits, most significant bit first, are, in this order,
+  : A base16 {{!RFC4648}} (hexadecimal) representation of three bytes, i.e.,
+  exactly six hexadecimal digits. The value is case-insensitive. The first 22
+  bits, most significant bit first, are, in this order,
   `simple_profile_compliant`, `dense_profile_compliant`,
   `predictive_profile_compliant`, `main_profile_compliant`, and
   `reserved_profile_18bits` as defined in the sequence parameter set of
-  {{ISO.IEC.23090-9}}, Section 7.3.2.1. The last two bits MUST be set to 0 and
-  MUST be ignored by receivers. They do not correspond to the
-  `slice_reordering_constraint` and `unique_point_positions_constraint` flags at
-  the same positions in the SPS. When used to describe a bitstream, the bits are
-  set to the values of the corresponding syntax elements in the SPS of the
-  bitstream. When used to describe receiver capabilities, a bit set to 1
-  indicates that the receiver supports the corresponding profile. For example,
-  `800000` indicates the Simple profile, and `100000` indicates the Main
-  profile.
+  {{ISO.IEC.23090-9}}, Section 7.3.2.1. The bits corresponding to
+  `reserved_profile_18bits` MUST be set to 0 and MUST be ignored by receivers.
+  The last two bits MUST be set to 0 and MUST be ignored by receivers. They do
+  not correspond to the `slice_reordering_constraint` and
+  `unique_point_positions_constraint` flags at the same positions in the SPS.
+  When used to describe a bitstream, the bits are set to the values of the
+  corresponding syntax elements in the SPS of the bitstream. When used to
+  describe receiver capabilities, a bit set to 1 indicates that the receiver
+  supports the corresponding profile. For example, `800000` indicates the Simple
+  profile, and `100000` indicates the Main profile.
 
 **level-idc**:
   : A decimal representation of the `level_idc` syntax element of the SPS as
   defined in {{ISO.IEC.23090-9}}, Section 7.3.2.1, i.e., 20 times the level
-  number (e.g., `80` for level 4). When used to describe a bitstream, it is the
-  level to which the bitstream conforms. When used to describe receiver
+  number (e.g., `80` for level 4). The value is in the range 0 to 255. Only
+  values corresponding to levels defined in {{ISO.IEC.23090-9}}, Annex A.4.1
+  (currently `80` and `120`) are valid. When used to describe a bitstream, it is
+  the level to which the bitstream conforms. When used to describe receiver
   capabilities, it is the highest level that the receiver supports for all
   profiles indicated in profile-compatibility. Levels are compared by their
   `level_idc` value as specified in {{ISO.IEC.23090-9}}, Annex A.4.1. A receiver
