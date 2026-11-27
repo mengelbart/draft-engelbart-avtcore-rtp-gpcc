@@ -59,11 +59,11 @@ This memo describes an RTP payload format for geometry-based point cloud
 compression (G-PCC) ({{ISO.IEC.23090-9}}). The RTP payload format defined in
 this document supports the packetization of one or more data units in an RTP
 packet payload and the fragmentation of a single data unit into multiple RTP
-packets. This memo also describes congestion control for a practical solution
-for the real-time streaming of point clouds.
-Finally, the document defines parameters that may be used to select
-optional features of the payload format or signal properties of the RTP stream.
-The parameters can be used with the Session Description Protocol (SDP).
+packets. This memo also discusses congestion control and rate adaptation for the
+real-time streaming of point clouds. Finally, the document defines parameters
+that may be used to select optional features of the payload format or signal
+properties of the RTP stream. The parameters can be used with the Session
+Description Protocol (SDP).
 
 --- middle
 
@@ -746,17 +746,46 @@ if best-effort service is being used is users of this payload format MUST
 monitor packet loss to ensure that the packet loss rate is within acceptable
 parameters. Circuit Breakers {{!RFC8083}} is an update to RTP {{!RFC3550}} that
 defines criteria for when one is required to stop sending RTP Packet Streams.
-The circuit breakers is to be implemented and followed.
+RTP circuit breakers {{!RFC8083}} MUST be implemented and followed.
 
-The bitrate can be dynamically adapted when real-time encoding is used. If the
-packet payload is not encrypted and intermediate network elements have access to
-the payload, they can select packets to drop based on the payload header.
+Applications SHOULD also use a congestion control algorithm for interactive
+real-time media, such as {{?RFC8298}} or {{?RFC8698}}, which can use the RTCP
+feedback defined in {{?RFC8888}}.
 
-Attribute decoding depends on geometry decoding and ADUs can become obsolete,
-when the corresponding geometry data is dropped. Thus, intermediates SHOULD
-prefer dropping ADUs first. Similarly, fragmentation units can only be
-reconstructed if all fragments arrive. Thus, it is reasonable to drop either all
-or none of the packets that are part of the same fragmentation unit.
+When real-time encoding is used, the sender can adapt the bitrate by changing
+the frame rate, the geometry precision (position quantization or octree depth),
+the attribute quantization parameters, the set of attributes sent, or the point
+density of the input.
+
+In addition, if the payload is not encrypted or the middlebox is part of the SRTP
+security context, a Selective Forwarding Middlebox ({{?RFC7667}}, Section 3.7)
+can reduce the bitrate by dropping selected DUs. Some of the rules below require
+parsing the SPS and GDU header in addition to the payload header. The middlebox
+needs to rewrite sequence numbers, RTCP reports, aggregation packets, and the
+marker bit, so that dropped DUs do not appear as packet loss.
+
+Frames are coded independently ({{ISO.IEC.23090-9}}, Section 6.4.4), so a
+middlebox can drop all DUs of a frame except parameter sets. When dropping only
+some DUs of a frame, the following dependencies apply ({{ISO.IEC.23090-9}}):
+
+* Parameter sets are needed to decode all DUs that reference them. Middleboxes
+  SHOULD NOT drop them.
+* Frame-specific attribute properties DUs override attribute properties of the
+  SPS, such as scale and offset, for a single frame. Without them, decoded
+  attribute values of the frame can be misinterpreted. Middleboxes SHOULD NOT
+  drop them.
+* ADUs of a slice cannot be decoded without a GDU of the slice. If all GDUs of a
+  slice are dropped, its ADUs SHOULD be dropped as well.
+* Without its ADUs, the geometry of a slice remains decodable with default
+  attribute values (Section 8.3.4), but the bitstream no longer conforms
+  (Section 6.4.5) unless the ADUs are replaced by defaulted attribute DUs.
+* When `slice_reordering_constraint` in the SPS is 1, removing slices can make
+  following slices undecodable (Sections 7.4.2.1.1 and 7.4.3.2). Middleboxes
+  SHOULD NOT drop slices of such bitstreams.
+* When `entropy_continuation_enabled` in the SPS is 1, parsing of a GDU or ADU
+  can depend on DUs of preceding slices (Section 11.6). Middleboxes SHOULD NOT
+  drop GDUs or ADUs of such bitstreams.
+* Middleboxes SHOULD drop either all or none of the fragments of a DU.
 
 # IANA Considerations
 
