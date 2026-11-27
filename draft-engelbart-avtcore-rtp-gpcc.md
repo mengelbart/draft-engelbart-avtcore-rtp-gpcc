@@ -789,12 +789,9 @@ some DUs of a frame, the following dependencies apply ({{ISO.IEC.23090-9}}):
 
 # IANA Considerations
 
-> **TODO**: Check if more registrations are necessary.
-
-This memo requests that IANA registers a new media type as specified in
-{{media-type}}. The media type is also requested to be added to the IANA
-registry for "RTP Payload Format MIME types"
-<http://www.iana.org/assignments/rtp-parameters>.
+IANA is requested to register the media type application/gpcc, as specified in
+{{media-type}}, in the "Media Types" registry
+<https://www.iana.org/assignments/media-types>.
 
 # Security Considerations {#security-considerations}
 
