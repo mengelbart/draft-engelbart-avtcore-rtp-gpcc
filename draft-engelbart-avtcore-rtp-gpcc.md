@@ -507,8 +507,9 @@ A fragmented DU MUST be carried in at least two fragmentation packets, i.e., a
 DU MUST NOT be sent as a single fragmentation packet. Each fragmentation packet
 MUST carry a non-empty fragment.
 
-The timestamp of all fragmentation packets MUST be set to the same value: the
-timestamp of the fragmented DU.
+The RTP timestamp of all fragmentation packets of a fragmented DU MUST be set to
+the same value: the RTP timestamp of the point cloud frame to which the DU
+belongs, as defined in {{rtp-header}}.
 
 A receiver reassembles a DU from a series of fragmentation packets that starts
 with a first fragmentation packet (`010`), continues with zero or more middle
