@@ -269,7 +269,9 @@ a single RTP session.
 
 ## RTP Header Usage {#rtp-header}
 
-The format of the RTP header is specified in {{!RFC3550}} and replicated in {{fig-header}} for convenience. This payload format uses the fields of the header in a manner consistent with that specification.
+The format of the RTP header is specified in {{!RFC3550}} and replicated in
+{{fig-header}} for convenience. This payload format uses the fields of the
+header in a manner consistent with that specification.
 
 ~~~
  0                   1                   2                   3
@@ -603,7 +605,8 @@ This section describes the media type registration following {{!RFC6838}} and
   : RFC XXXX and {{ISO.IEC.23090-9}}.
 
 **Applications that use this media type**:
-  : Any application that relies on G-PCC-based point cloud transmission over RTP.
+  : Any application that relies on G-PCC-based point cloud transmission over
+  RTP.
 
 **Fragment identifier considerations**:
   : N/A
@@ -739,7 +742,7 @@ profile-compatibility and level-idc:
 ### Declarative SDP Considerations
 
 When G-PCC over RTP is offered with SDP in a declarative style, as in Real Time
-Streaming Protocol (RTSP) {{!RFC7826}} or Session Announcement Protocol (SAP)
+Streaming Protocol (RTSP) {{?RFC7826}} or Session Announcement Protocol (SAP)
 {{?RFC2974}}, the following considerations are necessary.
 
 * The parameters profile-compatibility and level-idc describe the bitstream that
@@ -753,7 +756,7 @@ Streaming Protocol (RTSP) {{!RFC7826}} or Session Announcement Protocol (SAP)
 # Congestion Control
 
 Congestion control for RTP SHALL be used in accordance with {{!RFC3550}}, and
-with any applicable RTP profile: e.g., {{!RFC3551}}.  If best-effort service is
+with any applicable RTP profile: e.g., {{?RFC3551}}.  If best-effort service is
 being used, users of this payload format MUST monitor packet loss to ensure that
 the packet loss rate is within acceptable parameters. Circuit Breakers
 {{!RFC8083}} is an update to RTP {{!RFC3550}} that defines criteria for when one
@@ -769,12 +772,12 @@ the frame rate, the geometry precision (position quantization or octree depth),
 the attribute quantization parameters, the set of attributes sent, or the point
 density of the input.
 
-In addition, if the payload is not encrypted or the middlebox is part of the SRTP
-security context, a Selective Forwarding Middlebox ({{?RFC7667}}, Section 3.7)
-can reduce the bitrate by dropping selected DUs. Some of the rules below require
-parsing the SPS and GDU header in addition to the payload header. The middlebox
-needs to rewrite sequence numbers, RTCP reports, aggregation packets, and the
-marker bit, so that dropped DUs do not appear as packet loss.
+In addition, if the payload is not encrypted or the middlebox is part of the
+SRTP security context, a Selective Forwarding Middlebox ({{?RFC7667}}, Section
+3.7) can reduce the bitrate by dropping selected DUs. Some of the rules below
+require parsing the SPS and GDU header in addition to the payload header. The
+middlebox needs to rewrite sequence numbers, RTCP reports, aggregation packets,
+and the marker bit, so that dropped DUs do not appear as packet loss.
 
 Frames are coded independently ({{ISO.IEC.23090-9}}, Section 6.4.4), so a
 middlebox can drop all DUs of a frame except parameter sets. When dropping only
@@ -809,8 +812,8 @@ IANA is requested to register the media type application/gpcc, as specified in
 
 RTP packets using the payload format defined in this specification are subject
 to the security considerations discussed in the RTP specification {{!RFC3550}},
-and in any applicable RTP profile such as RTP/AVP {{!RFC3551}}, RTP/AVPF
-{{!RFC4585}}, RTP/SAVP {{!RFC3711}}, or RTP/SAVPF {{!RFC5124}}.  However, as
+and in any applicable RTP profile such as RTP/AVP {{?RFC3551}}, RTP/AVPF
+{{?RFC4585}}, RTP/SAVP {{?RFC3711}}, or RTP/SAVPF {{?RFC5124}}.  However, as
 "Securing the RTP Protocol Framework: Why RTP Does Not Mandate a Single Media
 Security Solution" {{?RFC7202}} discusses, it is not an RTP payload format's
 responsibility to discuss or mandate what solutions are used to meet the basic
