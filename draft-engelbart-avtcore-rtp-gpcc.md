@@ -6,7 +6,7 @@ category: std
 date: {DATE}
 
 ipr: trust200902
-area: "Applications and Real-Time Area"
+area: "Web and Internet Transport"
 workgroup: "Audio/Video Transport Core Maintenance"
 keyword:
  - RTP
@@ -29,12 +29,12 @@ author:
  -
     ins: M. Engelbart
     fullname: Mathis Engelbart
-    organization: Technical University Munich
+    organization: Technical University of Munich
     email: mathis.engelbart@gmail.com
  -
     ins: J. Ott
     fullname: Jörg Ott
-    organization: Technical University Munich
+    organization: Technical University of Munich
     email: ott@in.tum.de
  -
     ins: L. Kondrad
@@ -56,14 +56,13 @@ normative:
 --- abstract
 
 This memo describes an RTP payload format for geometry-based point cloud
-compression (G-PCC) ({{ISO.IEC.23090-9}}). The RTP payload format defined in
-this document supports the packetization of one or more data units in an RTP
-packet payload and the fragmentation of a single data unit into multiple RTP
-packets. This memo also discusses congestion control and rate adaptation for the
-real-time streaming of point clouds. Finally, the document defines parameters
-that may be used to select optional features of the payload format or signal
-properties of the RTP stream. The parameters can be used with the Session
-Description Protocol (SDP).
+compression (G-PCC). The RTP payload format defined in this document supports
+the packetization of one or more data units in an RTP packet payload and the
+fragmentation of a single data unit into multiple RTP packets. This memo also
+discusses congestion control and rate adaptation for the real-time streaming of
+point clouds. Finally, the document defines parameters that may be used to
+select optional features of the payload format or signal properties of the RTP
+stream. The parameters can be used with the Session Description Protocol (SDP).
 
 --- middle
 
